@@ -116,7 +116,7 @@
           <Property Name="estado" Type="nvarchar" MaxLength="25" />
           <Property Name="CodigoBP" Type="nvarchar" MaxLength="50" />
           <Property Name="fecha_venta" Type="datetime" />
-          <Property Name="monto_pagado" Type="bigint" />
+          <Property Name="monto_pagado" Type="numeric" Precision="18" Scale="2" />
         </EntityType>
         <EntityType Name="sysdiagrams">
           <Key>
@@ -557,12 +557,8 @@ warning 6035: The relationship 'FK_Stock_toAspNetUsers' has columns that are not
             <Parameter Name="new_diagramname" Mode="In" Type="String" />
           </FunctionImport>
           <FunctionImport Name="sp_upgraddiagrams" />
-          <EntitySet Name="Stocks" EntityType="DataBaseTestModel.Stock" />
-          <AssociationSet Name="FK_Stock_to_Pago" Association="DataBaseTestModel.FK_Stock_to_Pago">
-            <End Role="Pago" EntitySet="Pagoes" />
-            <End Role="Stock" EntitySet="Stocks" />
-          </AssociationSet>
           <EntitySet Name="Productoes" EntityType="DataBaseTestModel.Producto" />
+          <EntitySet Name="Stocks" EntityType="DataBaseTestModel.Stock" />
           <AssociationSet Name="FK_Producto_toBrand" Association="DataBaseTestModel.FK_Producto_toBrand">
             <End Role="Brand" EntitySet="Brands" />
             <End Role="Producto" EntitySet="Productoes" />
@@ -570,6 +566,10 @@ warning 6035: The relationship 'FK_Stock_toAspNetUsers' has columns that are not
           <AssociationSet Name="FK_Producto_toCategoria" Association="DataBaseTestModel.FK_Producto_toCategoria">
             <End Role="Categoria" EntitySet="Categorias" />
             <End Role="Producto" EntitySet="Productoes" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Stock_to_Pago" Association="DataBaseTestModel.FK_Stock_to_Pago">
+            <End Role="Pago" EntitySet="Pagoes" />
+            <End Role="Stock" EntitySet="Stocks" />
           </AssociationSet>
           <AssociationSet Name="FK_Stock_toProducto" Association="DataBaseTestModel.FK_Stock_toProducto">
             <End Role="Producto" EntitySet="Productoes" />
@@ -612,33 +612,6 @@ warning 6035: The relationship 'FK_Stock_toAspNetUsers' has columns that are not
           <Property Type="String" Name="Owner" Nullable="true" MaxLength="128" />
           <Property Type="Int32" Name="OwnerID" Nullable="false" />
         </ComplexType>
-        <EntityType Name="Stock">
-          <Key>
-            <PropertyRef Name="IdStock" />
-          </Key>
-          <Property Name="IdStock" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="IdProducto" Type="Int32" />
-          <Property Name="IdUsuario" Type="Int32" />
-          <Property Name="IdPago" Type="Int32" />
-          <Property Name="estado" Type="String" MaxLength="25" FixedLength="false" Unicode="true" />
-          <Property Name="CodigoBP" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="fecha_venta" Type="DateTime" Precision="3" />
-          <Property Name="monto_pagado" Type="Int64" />
-          <NavigationProperty Name="Pago" Relationship="DataBaseTestModel.FK_Stock_to_Pago" FromRole="Stock" ToRole="Pago" />
-          <NavigationProperty Name="Producto" Relationship="DataBaseTestModel.FK_Stock_toProducto" FromRole="Stock" ToRole="Producto" />
-        </EntityType>
-        <Association Name="FK_Stock_to_Pago">
-          <End Type="DataBaseTestModel.Pago" Role="Pago" Multiplicity="0..1" />
-          <End Type="DataBaseTestModel.Stock" Role="Stock" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Pago">
-              <PropertyRef Name="IdPago" />
-            </Principal>
-            <Dependent Role="Stock">
-              <PropertyRef Name="IdPago" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
         <EntityType Name="Producto">
           <Key>
             <PropertyRef Name="IdProducto" />
@@ -655,6 +628,21 @@ warning 6035: The relationship 'FK_Stock_toAspNetUsers' has columns that are not
           <NavigationProperty Name="Brand" Relationship="DataBaseTestModel.FK_Producto_toBrand" FromRole="Producto" ToRole="Brand" />
           <NavigationProperty Name="Categoria" Relationship="DataBaseTestModel.FK_Producto_toCategoria" FromRole="Producto" ToRole="Categoria" />
           <NavigationProperty Name="Stocks" Relationship="DataBaseTestModel.FK_Stock_toProducto" FromRole="Producto" ToRole="Stock" />
+        </EntityType>
+        <EntityType Name="Stock">
+          <Key>
+            <PropertyRef Name="IdStock" />
+          </Key>
+          <Property Name="IdStock" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="IdProducto" Type="Int32" />
+          <Property Name="IdUsuario" Type="Int32" />
+          <Property Name="IdPago" Type="Int32" />
+          <Property Name="estado" Type="String" MaxLength="25" FixedLength="false" Unicode="true" />
+          <Property Name="CodigoBP" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="fecha_venta" Type="DateTime" Precision="3" />
+          <Property Name="monto_pagado" Type="Decimal" Precision="18" Scale="2" />
+          <NavigationProperty Name="Pago" Relationship="DataBaseTestModel.FK_Stock_to_Pago" FromRole="Stock" ToRole="Pago" />
+          <NavigationProperty Name="Producto" Relationship="DataBaseTestModel.FK_Stock_toProducto" FromRole="Stock" ToRole="Producto" />
         </EntityType>
         <Association Name="FK_Producto_toBrand">
           <End Type="DataBaseTestModel.Brand" Role="Brand" Multiplicity="1" />
@@ -677,6 +665,18 @@ warning 6035: The relationship 'FK_Stock_toAspNetUsers' has columns that are not
             </Principal>
             <Dependent Role="Producto">
               <PropertyRef Name="IdCategoria" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Stock_to_Pago">
+          <End Type="DataBaseTestModel.Pago" Role="Pago" Multiplicity="0..1" />
+          <End Type="DataBaseTestModel.Stock" Role="Stock" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Pago">
+              <PropertyRef Name="IdPago" />
+            </Principal>
+            <Dependent Role="Stock">
+              <PropertyRef Name="IdPago" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -859,20 +859,6 @@ warning 6035: The relationship 'FK_Stock_toAspNetUsers' has columns that are not
           </FunctionImportMapping>
           <FunctionImportMapping FunctionImportName="sp_renamediagram" FunctionName="DataBaseTestModel.Store.sp_renamediagram" />
           <FunctionImportMapping FunctionImportName="sp_upgraddiagrams" FunctionName="DataBaseTestModel.Store.sp_upgraddiagrams" />
-          <EntitySetMapping Name="Stocks">
-            <EntityTypeMapping TypeName="DataBaseTestModel.Stock">
-              <MappingFragment StoreEntitySet="Stock">
-                <ScalarProperty Name="monto_pagado" ColumnName="monto_pagado" />
-                <ScalarProperty Name="fecha_venta" ColumnName="fecha_venta" />
-                <ScalarProperty Name="CodigoBP" ColumnName="CodigoBP" />
-                <ScalarProperty Name="estado" ColumnName="estado" />
-                <ScalarProperty Name="IdPago" ColumnName="IdPago" />
-                <ScalarProperty Name="IdUsuario" ColumnName="IdUsuario" />
-                <ScalarProperty Name="IdProducto" ColumnName="IdProducto" />
-                <ScalarProperty Name="IdStock" ColumnName="IdStock" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
           <EntitySetMapping Name="Productoes">
             <EntityTypeMapping TypeName="DataBaseTestModel.Producto">
               <MappingFragment StoreEntitySet="Producto">
@@ -885,6 +871,20 @@ warning 6035: The relationship 'FK_Stock_toAspNetUsers' has columns that are not
                 <ScalarProperty Name="descripcion_producto" ColumnName="descripcion_producto" />
                 <ScalarProperty Name="nombre_producto" ColumnName="nombre_producto" />
                 <ScalarProperty Name="IdProducto" ColumnName="IdProducto" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Stocks">
+            <EntityTypeMapping TypeName="DataBaseTestModel.Stock">
+              <MappingFragment StoreEntitySet="Stock">
+                <ScalarProperty Name="monto_pagado" ColumnName="monto_pagado" />
+                <ScalarProperty Name="fecha_venta" ColumnName="fecha_venta" />
+                <ScalarProperty Name="CodigoBP" ColumnName="CodigoBP" />
+                <ScalarProperty Name="estado" ColumnName="estado" />
+                <ScalarProperty Name="IdPago" ColumnName="IdPago" />
+                <ScalarProperty Name="IdUsuario" ColumnName="IdUsuario" />
+                <ScalarProperty Name="IdProducto" ColumnName="IdProducto" />
+                <ScalarProperty Name="IdStock" ColumnName="IdStock" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>

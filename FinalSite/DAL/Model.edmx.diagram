@@ -18,11 +18,11 @@
         <AssociationConnector Association="DataBaseTestModel.FK_dbo_AspNetUserLogins_dbo_AspNetUsers_UserId" ManuallyRouted="false" />
         <AssociationConnector Association="DataBaseTestModel.FK_Brand_ToBusinessPartner" ManuallyRouted="false" />
         <AssociationConnector Association="DataBaseTestModel.AspNetUserRoles" ManuallyRouted="false" />
-        <EntityTypeShape EntityType="DataBaseTestModel.Stock" Width="1.5" PointX="7.5" PointY="2.75" />
-        <AssociationConnector Association="DataBaseTestModel.FK_Stock_to_Pago" />
         <EntityTypeShape EntityType="DataBaseTestModel.Producto" Width="1.5" PointX="5.25" PointY="0.875" />
+        <EntityTypeShape EntityType="DataBaseTestModel.Stock" Width="1.5" PointX="7.5" PointY="2.75" />
         <AssociationConnector Association="DataBaseTestModel.FK_Producto_toBrand" />
         <AssociationConnector Association="DataBaseTestModel.FK_Producto_toCategoria" />
+        <AssociationConnector Association="DataBaseTestModel.FK_Stock_to_Pago" />
         <AssociationConnector Association="DataBaseTestModel.FK_Stock_toProducto" />
       </Diagram>
     </edmx:Diagrams>
