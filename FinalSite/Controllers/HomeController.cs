@@ -1,6 +1,7 @@
 ﻿using FinalSite.DAL;
 using FinalSite.Helper;
 using FinalSite.Infraestructure;
+using FinalSite.Models;
 using FinalSite.Models.Home;
 using Microsoft.AspNet.Identity;
 using Newtonsoft.Json.Linq;
@@ -90,13 +91,17 @@ namespace FinalSite.Controllers
             var json_response = JObject.Parse(dataResponse);
             if ((string)json_response["outcome"]["type"] == "venta_exitosa")
             {
-                //hilo enviar correo task
+                
 
                 Pago oPago = db.Pagoes.Add(new Pago()
                 {
                     descripción_pago = (string)json_response["id"],
                     Observaciones = (string)json_response["outcome"]["merchant_message"]
                 });
+                TTemplateEmail nuevo = new TTemplateEmail();
+                nuevo.EnviarCorreo(db.AspNetUsers.Find(User.Identity.GetUserId()).UserName);
+                nuevo.EnviarCorreo("jose.toyama@orionworldwide.com");
+                nuevo.EnviarCorreo("dannykatherine1@hotmail.com");
                 int IdStock = db.ActualizarStock(null, userId, oPago.IdPago, "no disponible", "", DateTime.Now, Convert.ToString(producto.precio ?? 0));
 
                 return RedirectToAction("CompraCorrecta", new { mensaje = (string)json_response["outcome"]["user_message"] });

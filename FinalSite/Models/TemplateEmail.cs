@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Text;
 using EASendMail; 
 using FinalSite.DAL;
-using Microsoft.AspNet.Identity
+using Microsoft.AspNet.Identity;
 
 namespace FinalSite.Models
 {
@@ -11,9 +11,9 @@ namespace FinalSite.Models
     {
         String email1;
         String email2;
-        public void EnviarCorreo()
+        public void EnviarCorreo(string email)
         {
-            DataBaseTestEntities db = new DataBaseTestEntities();
+            
           
             try
             {
@@ -21,9 +21,9 @@ namespace FinalSite.Models
 
                 // Your gmail email address
                 oMail.From = "soportembww@gmail.com";
-            // Set recipient email address
+                // Set recipient email address
 
-            oMail.To = "Dannykatherine1@hotmail.com";
+                oMail.To = email;
             
                 // Set email subject
                 oMail.Subject = "Compra de productos";
