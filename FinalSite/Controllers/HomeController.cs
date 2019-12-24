@@ -1,5 +1,4 @@
-﻿
-using FinalSite.DAL;
+﻿using FinalSite.DAL;
 using FinalSite.Helper;
 using FinalSite.Infraestructure;
 using FinalSite.Models.Home;
@@ -34,19 +33,19 @@ namespace FinalSite.Controllers
 
         }
         [HttpPost]
-        public ActionResult RealizarPagoList(String UserName)
+        public ActionResult RealizarPagoList(Card c, List<int> idProductos)
         {
             List<Item> cart = (List<Item>)Session["cart"];
             if (cart != null)
             {
-                return RedirectToAction("RealizarPago", new { cart, UserName });
+               
             }
             return View();
         }
 
-        public ActionResult RealizarPagoList()
+        public ActionResult RealizarPagoList(List<Producto> lista, string mensaje)
         {
-            return View();
+            return View(lista);
         }
 
         [HttpPost]
@@ -98,13 +97,13 @@ namespace FinalSite.Controllers
                     descripción_pago = (string)json_response["id"],
                     Observaciones = (string)json_response["outcome"]["merchant_message"]
                 });
-                int IdStock = db.ActualizarStock(null, userId, oPago.IdPago, "NO DISPONIBLE", "", DateTime.Now, Convert.ToString(producto.precio ?? 0));
+                int IdStock = db.ActualizarStock(null, userId, oPago.IdPago, "no disponible", "", DateTime.Now, Convert.ToString(producto.precio ?? 0));
 
                 return RedirectToAction("CompraCorrecta", new { mensaje = (string)json_response["outcome"]["user_message"] });
             }
             else
             {
-                return RedirectToAction("RealizarPago", new { IdProducto = IdProducto, mensaje = "Ocurrieron algunos probemas al reaclizar la transacion." });
+                return RedirectToAction("RealizarPago", new { IdProducto = IdProducto, mensaje = "Ocurrieron algunos probemas al realizar la transacion." });
             }
         }
         public ActionResult CompraCorrecta(string mensaje)
@@ -114,8 +113,8 @@ namespace FinalSite.Controllers
         private Security security()
         {
             Security security = new Security();
-            security.public_key = "pk_test_MU4roRrGcONMAEuf";
-            security.secret_key = "sk_test_LJuAeavC6tc8rYyi";
+            security.public_key = "pk_live_gZSli9WajesA88Lw";
+            security.secret_key = "sk_live_OGCBov4mx7FQe0Mt";
             return security;
         }
 

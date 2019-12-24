@@ -14,19 +14,19 @@
         <div class="col-7">
             <h4 class="text-center"> Datos de Compra</h4>
             <div class="bg-light pl-2 pr-2">
-                @using (Html.BeginForm("RealizarPago", "Home", new { IdProducto = Model.IdProducto }, FormMethod.Post))
+                @using (Html.BeginForm("RealizarPago", "Home", FormMethod.Post))
                 {
 
                     @Html.AntiForgeryToken()
                     <hr />
                     <div class="d-none">
-                        <input id="amount" type="number" name="amount" value="@Model.precio" />
+                        <input id="amount" type="number" name="amount" value="" />
                     </div>
 
                     <div class="d-none">
                         <input id="UserName" type="text" name="UserName" value="@User.Identity.GetUserName()" />
                     </div>
-                    <div class="d-none"><input id="card[IdProducto]" type="number" name="IdProducto" value="@Model.IdProducto" /></div>
+                    <div class="d-none"><input id="card[IdProducto]" type="number" name="IdProducto" value="" /></div>
                     if (@ViewBag.mensaje != null)
                     {
                         <div> @ViewBag.mensaje</div>
@@ -63,7 +63,7 @@
                         </div>
                     </div>
 
-                    <button type="submit" class="btn btn-dark" id="btn-pagar">Pagar @string.Format("{0:n2}", Model.precio)</button>
+                    <button type="submit" class="btn btn-dark" id="btn-pagar">Pagar </button>
 
                 }
                 <hr />
@@ -81,14 +81,22 @@
                     <th>Producto</th>
                     <th>Precio</th>
                 </tr>
-                <tr>
-                    <td>@Model.IdProducto</td>
-                    <td>@Model.nombre_producto</td>
-                    <th>@string.Format("{0:n2}", Model.precio)</th>
-                </tr>
+                @{
+                    var total = 0;
+                }
+                @foreach (var item in Model)
+                {
+                    <tr>
+                        <td>@item.IdProducto.</td>
+                        <td>@item.nombre_producto</td>
+                        <th>@string.Format("{0:n2}", item.precio)</th>
+                        total = total + @item.precio;
+                    </tr>
+                }
+
                 <tr>
                     <td>Total</td>
-                    <td>@string.Format("{0:n2}", Model.precio)</td>
+                    <td>@string.Format("{0:n2}", @total)</td>
                 </tr>
             </table>
 

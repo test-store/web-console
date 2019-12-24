@@ -16,6 +16,11 @@ namespace FinalSite.Controllers
     public class AdminController : Controller
     {
         DataBaseTestEntities context = new DataBaseTestEntities();
+        public ActionResult AllBP()
+        {
+            var BP = context.BusinessPartners.ToList();
+            return View(BP);
+        }
         public ActionResult Index()
         {
             return Redirect("AllProducts");
