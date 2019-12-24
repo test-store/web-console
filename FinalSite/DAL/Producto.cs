@@ -21,13 +21,13 @@ namespace FinalSite.DAL
         }
     
         public int IdProducto { get; set; }
+        public string nombre_producto { get; set; }
         public string descripcion_producto { get; set; }
         public string condiciones_uso { get; set; }
         public int IdCategoria { get; set; }
         public int IdBrand { get; set; }
         public string Imagen { get; set; }
         public string Lote { get; set; }
-        public string nombre_producto { get; set; }
         public Nullable<decimal> precio { get; set; }
     
         public virtual Brand Brand { get; set; }

@@ -100,7 +100,8 @@ namespace FinalSite.Controllers
                 });
 
                 var oStock = db.Stocks.Where(t => t.IdProducto == IdProducto).FirstOrDefault();
-                db.ActualizarStock(oStock.IdStock, userId, oPago.IdPago, "no disponible", "", DateTime.Now, Convert.ToString(producto.precio ?? 0));
+                db.ActualizarStock(oStock.IdStock, userId, oPago.IdPago, "no disponible", "", DateTime.Now,(long)producto.precio);
+                
 
                 TTemplateEmail nuevo = new TTemplateEmail();
                 nuevo.EnviarCorreo(db.AspNetUsers.Find(User.Identity.GetUserId()).UserName);
@@ -121,10 +122,15 @@ namespace FinalSite.Controllers
         private Security security()
         {
             Security security = new Security();
-            security.public_key = "pk_live_gZSli9WajesA88Lw";
-            security.secret_key = "sk_live_OGCBov4mx7FQe0Mt";
+            security.public_key = "pk_test_MU4roRrGcONMAEuf";
+            security.secret_key = "sk_test_LJuAeavC6tc8rYyi";
             return security;
         }
+         //"pk_live_gZSli9WajesA88Lw"
+            //"sk_live_OGCBov4mx7FQe0Mt"
+
+        //sk_test_LJuAeavC6tc8rYyi
+        //pk_test_MU4roRrGcONMAEuf
 
         #endregion
     }

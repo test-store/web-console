@@ -35,11 +35,11 @@ namespace FinalSite.DAL
         public virtual DbSet<BusinessPartner> BusinessPartners { get; set; }
         public virtual DbSet<Categoria> Categorias { get; set; }
         public virtual DbSet<Pago> Pagoes { get; set; }
-        public virtual DbSet<Producto> Productoes { get; set; }
         public virtual DbSet<sysdiagram> sysdiagrams { get; set; }
         public virtual DbSet<Stock> Stocks { get; set; }
+        public virtual DbSet<Producto> Productoes { get; set; }
     
-        public virtual int ActualizarStock(Nullable<int> idStock, Nullable<int> idUsuario, Nullable<int> idPago, string estado, string codigoBP, Nullable<System.DateTime> fecha_venta, string monto_pagado)
+        public virtual int ActualizarStock(Nullable<int> idStock, Nullable<int> idUsuario, Nullable<int> idPago, string estado, string codigoBP, Nullable<System.DateTime> fecha_venta, Nullable<long> monto_pagado)
         {
             var idStockParameter = idStock.HasValue ?
                 new ObjectParameter("IdStock", idStock) :
@@ -65,9 +65,9 @@ namespace FinalSite.DAL
                 new ObjectParameter("fecha_venta", fecha_venta) :
                 new ObjectParameter("fecha_venta", typeof(System.DateTime));
     
-            var monto_pagadoParameter = monto_pagado != null ?
+            var monto_pagadoParameter = monto_pagado.HasValue ?
                 new ObjectParameter("monto_pagado", monto_pagado) :
-                new ObjectParameter("monto_pagado", typeof(string));
+                new ObjectParameter("monto_pagado", typeof(long));
     
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("ActualizarStock", idStockParameter, idUsuarioParameter, idPagoParameter, estadoParameter, codigoBPParameter, fecha_ventaParameter, monto_pagadoParameter);
         }

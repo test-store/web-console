@@ -13,7 +13,7 @@ namespace FinalSite.Models
         public string condiciones_uso { get; set; }
         public Nullable<int> IdCategoria { get; set; }
         public Nullable<int> IdBrand { get; set; }
-        public Nullable<double> precio_producto { get; set; }
+        public Nullable<int> precio_producto { get; set; }
         public string Imagen { get; set; }
         public string Lote { get; set; }
     }
