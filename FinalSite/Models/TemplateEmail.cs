@@ -9,8 +9,7 @@ namespace FinalSite.Models
 {
    public class TTemplateEmail
     {
-        String email1;
-        String email2;
+
         public void EnviarCorreo(string email)
         {
             
@@ -28,7 +27,7 @@ namespace FinalSite.Models
                 // Set email subject
                 oMail.Subject = "Compra de productos";
                 // Set email body
-                oMail.TextBody = "Gracias por su compra en orionPeru.azure ";
+                oMail.TextBody = "Gracias por su compra,  pronto le enviaremos el detalle de su compra";
 
                 // Gmail SMTP server address
                 SmtpServer oServer = new SmtpServer("smtp.gmail.com");
@@ -57,4 +56,4 @@ namespace FinalSite.Models
             }
         }
     }
-}
+} 

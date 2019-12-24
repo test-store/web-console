@@ -39,7 +39,7 @@ namespace FinalSite.Controllers
             List<Item> cart = (List<Item>)Session["cart"];
             if (cart != null)
             {
-                               
+
             }
             return View();
         }
@@ -91,18 +91,21 @@ namespace FinalSite.Controllers
             var json_response = JObject.Parse(dataResponse);
             if ((string)json_response["outcome"]["type"] == "venta_exitosa")
             {
-                
+
 
                 Pago oPago = db.Pagoes.Add(new Pago()
                 {
                     descripción_pago = (string)json_response["id"],
                     Observaciones = (string)json_response["outcome"]["merchant_message"]
                 });
+
+                var oStock = db.Stocks.Where(t => t.IdProducto == IdProducto).FirstOrDefault();
+                db.ActualizarStock(oStock.IdStock, userId, oPago.IdPago, "no disponible", "", DateTime.Now, Convert.ToString(producto.precio ?? 0));
+
                 TTemplateEmail nuevo = new TTemplateEmail();
                 nuevo.EnviarCorreo(db.AspNetUsers.Find(User.Identity.GetUserId()).UserName);
                 nuevo.EnviarCorreo("jose.toyama@orionworldwide.com");
                 nuevo.EnviarCorreo("dannykatherine1@hotmail.com");
-                int IdStock = db.ActualizarStock(null, userId, oPago.IdPago, "no disponible", "", DateTime.Now, Convert.ToString(producto.precio ?? 0));
 
                 return RedirectToAction("CompraCorrecta", new { mensaje = (string)json_response["outcome"]["user_message"] });
             }
@@ -118,8 +121,8 @@ namespace FinalSite.Controllers
         private Security security()
         {
             Security security = new Security();
-            security.public_key = "pk_live_gZSli9WajesA88Lw";
-            security.secret_key = "sk_live_OGCBov4mx7FQe0Mt";
+            security.public_key = "pk_test_MU4roRrGcONMAEuf";
+            security.secret_key = "sk_test_LJuAeavC6tc8rYyi";
             return security;
         }
 
