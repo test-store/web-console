@@ -1,0 +1,166 @@
+﻿
+<!DOCTYPE html>
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>@ViewBag.Title</title>
+    <!-- Custom fonts for this template-->
+    <link href="~/AdminStyle/vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
+
+    <!-- Page level plugin CSS-->
+    <link href="~/AdminStyle/vendor/datatables/dataTables.bootstrap4.css" rel="stylesheet">
+
+    <!-- Custom styles for this template-->
+    <link href="~/AdminStyle/css/sb-admin.css" rel="stylesheet">
+</head>
+<<body id="page-top">
+
+    <nav class="navbar navbar-expand navbar-dark bg-dark static-top">
+
+        <a class="navbar-brand mr-1" href="../Admin/Dashboard">Dashboard - Admin</a>
+
+        <button class="btn btn-link btn-sm text-white order-1 order-sm-0" id="sidebarToggle" href="#">
+            <i class="fas fa-bars"></i>
+        </button>
+
+
+            
+
+    </nav>
+
+    <div id="wrapper">
+
+        <!-- Sidebar -->
+        <ul class="sidebar navbar-nav">
+            <li class="nav-item active">
+                <a class="nav-link" href="../Admin/Dashboard">
+                    <i class="fas fa-fw fa-tachometer-alt"></i>
+                    <span>Dashboard</span>
+                </a>
+            </li>
+
+            <li class="nav-item active">
+                <a class="nav-link" href="../Admin/AllCategories">
+                    <i class="fas fa-fw fa-tachometer-alt"></i>
+                    <span>Categories</span>
+                </a>
+            </li>
+            <li class="nav-item active">
+                <a class="nav-link" href="../Admin/AllBrands">
+                    <i class="fas fa-fw fa-tachometer-alt"></i>
+                    <span>Brands</span>
+                </a>
+            </li>
+
+            <li class="nav-item active">
+                <a class="nav-link" href="../Admin/AllBP">
+                    <i class="fas fa-fw fa-tachometer-alt"></i>
+                    <span>Businness Partners</span>
+                </a>
+            </li>
+            <li class="nav-item">
+                @Html.ActionLink("Roles", "Index", "Role", null, new { @class = "nav-link" })
+            </li>
+
+            <li class="nav-item active">
+                <a class="nav-link" href="../Admin/AllProducts">
+                    <i class="fas fa-fw fa-tachometer-alt"></i>
+                    <span>Products</span>
+                </a>
+            </li>
+
+
+            <li class="nav-item">
+                <a class="nav-link" href="../Admin/AllStocks">
+                    <i class="fas fa-fw fa-chart-area"></i>
+                    <span>Stocks</span>
+                </a>
+            </li>
+
+            <li class="nav-item active">
+                <a class="nav-link" href="../Admin/AllUsers">
+                    <i class="fas fa-fw fa-tachometer-alt"></i>
+                    <span>Users</span>
+                </a>
+            </li>
+
+        </ul>
+
+        <div id="content-wrapper">
+
+            <div class="container-fluid">
+
+                <!-- Breadcrumbs-->
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item">
+                        <a href="#">Dashboard</a>
+                    </li>
+                    <li class="breadcrumb-item active">Overview</li>
+                </ol>
+
+
+                @RenderBody()
+            </div>
+     
+            <!-- /.container-fluid -->
+            <!-- Sticky Footer -->
+            <footer class="sticky-footer">
+                <div class="container my-auto">
+                    <div class="copyright text-center my-auto">
+                        <span>Orion Peru 2019</span>
+                    </div>
+                </div>
+            </footer>
+
+        </div>
+        <!-- /.content-wrapper -->
+
+    </div>
+    <!-- /#wrapper -->
+    <!-- Scroll to Top Button-->
+    <a class="scroll-to-top rounded" href="#page-top">
+        <i class="fas fa-angle-up"></i>
+    </a>
+
+    <!-- Logout Modal-->
+    <div class="modal fade" id="logoutModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Ready to Leave?</h5>
+                    <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">×</span>
+                    </button>
+                </div>
+                <div class="modal-body">Select "Logout" below if you are ready to end your current session.</div>
+                <div class="modal-footer">
+                    <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
+                    <a class="btn btn-primary" href="login.html">Logout</a>
+                </div>
+            </div>
+        </div>
+    </div>
+   
+   
+
+
+</body>
+</html>
+<!-- Bootstrap core JavaScript-->
+<script src="../AdminStyle/vendor/jquery/jquery.min.js"></script>
+<script src="../AdminStyle/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+
+<!-- Core plugin JavaScript-->
+<script src="../AdminStyle/vendor/jquery-easing/jquery.easing.min.js"></script>
+
+<!-- Page level plugin JavaScript-->
+<script src="../AdminStyle/vendor/chart.js/Chart.min.js"></script>
+<script src="../AdminStyle/vendor/datatables/jquery.dataTables.js"></script>
+<script src="../AdminStyle/vendor/datatables/dataTables.bootstrap4.js"></script>
+
+<!-- Custom scripts for all pages-->
+<script src="../AdminStyle/js/sb-admin.min.js"></script>
+
+<!-- Demo scripts for this page-->
+<script src="../AdminStyle/js/demo/datatables-demo.js"></script>
+<script src="../AdminStyle/js/demo/chart-area-demo.js"></script>

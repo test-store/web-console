@@ -1,0 +1,99 @@
+﻿@model IEnumerable<FinalSite.DAL.Producto>
+@{
+    ViewBag.Title = "Listar Productos";
+}
+
+
+<div class="container">
+    <h2 class="text-center">Catálogo de Productos</h2>
+    <hr />
+    <div class="row">
+        @foreach (var item in Model)
+        {
+
+            <div class="col-lg-4 mb-4">
+                <div class="card">
+                    <div class="card-header bgCard">
+                        <h3 class="text-center">@item.descripcion_producto</h3>
+                    </div>
+                    <div class="card-body">
+                        <img src="@item.Imagen" width="300" class="img-responsive" />
+
+                    </div>
+                    <div class="card-info">
+                        <p class="IdProducto">@item.IdProducto</p>
+                        <p>@item.precio</p>
+                        <p>@item.Brand.Descripcion_brand</p>
+                        <p>@item.Categoria.descripcion_categoria</p>
+                    </div>
+                    <div class="card-footer bg-transparent text-center">
+                        @Html.ActionLink("Detalles", "Details", new { id = item.IdProducto }, new { @class = "btn btn-info" })
+                        @Html.ActionLink("Comprar", "Index", "Carrito", null, new { @class = "agregar btn btn-info" })
+                     
+
+                    </div>
+                    <div>
+                        <div class="caption">
+                            <h5>@item.nombre_producto</h5>
+                            <p>S./ @item.precio </p>
+                            @using (Html.BeginForm("AddCart", "Home", new { IdProducto = item.IdProducto }, FormMethod.Post))
+                            {
+                                <button type="submit" class="float-right"><i class="fa fa-shopping-cart"></i></button>
+                            }
+
+
+                            <p>S./ @item.precio </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        }
+    </div>
+</div>
+
+@section Scripts
+{
+    <script type="text/javascript">
+
+    $(function () {
+        $(".agregar").click(function () {
+            var IdProducto = $(".IdProducto").text();
+            alert("id 0 "+ IdProducto);
+
+
+            $.ajax({
+                type: "POST",
+                url: "/Carrito/Index",
+                content: "application/json; charset=utf-8",
+                dataType: "json",
+                data: {id: IdProducto},
+
+                success: function(response) {
+                    if (response != null) {
+                        alert("id2  " + IdProducto);
+
+                    } else {
+                        alert("Something went wrong");
+                    }
+                },
+                failure: function(response) {
+                    alert("error");
+                },
+                error: function(response) {
+
+                    alert("id2  error " + IdProducto);
+
+                }
+            });
+
+        });
+    });
+
+    </script>
+}
+
+
+
+
+

@@ -1,0 +1,47 @@
+﻿@model FinalSite.Models.TemplateEmail
+@{
+    ViewBag.Title = "SendEmailUser";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Enviar información al usuario</h2>
+<form action="@Url.Action("SendEmailUser")" method="post" style="width:50%">
+    <div>
+        <label>Receptor de correo</label>
+        <input class="form-control" type="email" name="Para" value="" placeholder="Email" />
+
+    </div>
+    <br />
+
+    <div>
+        <label>Asunto</label>
+        <input class="form-control" type="text" name="Asunto" value="" placeholder="Asunto" />
+
+    </div>
+    <br />
+
+    <div>
+        <label>Mensaje</label>
+        <br />
+        <textarea style="width:750px; height:150px;" name="Mensaje" value="" placeholder="Mensaje">
+        </textarea>
+    </div>
+    <br />
+
+    <div>
+        <button id="enviar" class="btn btn-dark" type="submit">
+            Enviar
+        </button>
+    </div>
+    <br />
+
+</form>
+
+<h3 style="color:blue">
+    @ViewBag.Mensaje
+</h3>
+
+
+<h3 style="color:red">
+    @ViewBag.Error
+</h3>

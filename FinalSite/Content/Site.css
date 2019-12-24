@@ -1,0 +1,116 @@
+﻿header, footer {
+    padding-top: 10px;
+}
+
+body {
+    font-family: 'Roboto', sans-serif;
+    font-family: 'Open Sans', sans-serif;
+    font-family: 'Source Serif Pro', serif;
+    font-size: 1rem;
+}
+
+.jumbotron {
+    background-image: url('/Content/Images/banner.PNG');
+    background-size: cover;
+    height: 550px;
+}
+
+.container {
+    margin-top: 10px;
+    font-family: 'Montserrat', Georgia, 'Times New Roman', Times, serif;
+    font-style: normal;
+    font-weight: 100;
+    line-height: 1.42857143;
+    font-size: 1rem;
+}
+
+.contentOrion {
+    background-image: url("/Content/Images/santa.PNG");
+    background-size: cover;
+    height: 220px;
+    min-height: 200px;
+    padding-bottom: 45px;
+    display: flex;
+    padding-bottom: 20px;
+    padding-top: 20px;
+}
+
+h1, h2, h3, h4, h5, h6 :hover {
+    border-color: black;
+}
+
+img {
+    border-radius: 4px;
+    opacity: 0.8;
+}
+
+
+.contentDetails {
+    color: black;
+    font-size: 1.2rem;
+}
+
+.nav-tabs {
+    display: flex;
+    justify-content: center;
+    flex-direction: row;
+}
+
+.footerText {
+    padding-bottom: 15px;
+    padding-top: 15px;
+    color: white;
+    text-align: center;
+}
+
+.Container-footer {
+    background-color: #81a3cc;
+}
+
+.mainButton {
+
+{
+    background-color: #81a3cc;
+}
+
+}
+
+#profile-tab,
+#home-tab {
+    text-decoration-color: white;
+}
+
+.font-menu {
+    font-size: 1.3rem;
+    color: black;
+}
+
+    .font-menu: hover {
+        font-size: 1.5rem;
+        background-color: #c4bdbd;
+        border-bottom-color: black;
+        border-bottom-width: 2px;
+    }
+
+.bgCard {
+    background-color: #81a3cc;
+}
+
+.Panel {
+    position: relative;
+    text-align: center;
+    color: white;
+}
+
+/* Centered text */
+.Center {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
+.menuFooter {
+    padding-bottom: 50px;
+    padding-top: 50px;
+}

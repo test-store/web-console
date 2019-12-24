@@ -1,0 +1,126 @@
+﻿@using FinalSite.Models.Home;
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>@ViewBag.Title - Ofertas  y productos</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    <script src="https://kit.fontawesome.com/16b0071a85.js" crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <link href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN" crossorigin="anonymous">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" />
+    <link href="~/Content/main.css" rel="stylesheet" />
+    <link href="~/Content/site.css" rel="stylesheet" />
+    <script src="https://checkout.culqi.com/js/v3"></script>
+    <link rel="shortcut icon" href="orion16.ico" type="image/x-icon">
+    @Scripts.Render("~/bundles/modernizr")
+
+</head>
+<body>
+    <header class="container">
+
+        <nav class="navbar navbar-light navbar-expand-md bg-faded justify-content-center">
+            <div class=" d-flex w-25 mr-auto" width="183px">
+                <img src="~/Content/Images/logo.png" width="100%" />
+            </div>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#MainMenu">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="navbar-collapse collapse w-100 text-center" id="MainMenu">
+                <ul class="navbar-nav w-100 justify-content-center">
+                    <li class="nav-item active">
+                        @Html.ActionLink("Productos", "Index", "Productos", null, new { @class = "nav-link pr-5 pl-2 font-menu" })
+                    </li>
+                    <li class="nav-item">
+                        @Html.ActionLink("Ofertas", "Index", "Productos", null, new { @class = "nav-link pr-5 pl-2 font-menu" })
+                    </li>
+                    <li class="nav-item">
+                        @Html.ActionLink("IPG Clientes", "Index", "Productos", null, new { @class = "nav-link pr-5 pl-2 font-menu" })
+                    </li>
+                </ul>
+            </div>
+            
+            <div class="dropdown">
+                <button class="btn btn-outline-dark dropdown-toggle fa fa-shopping-cart pr-3" type="button" data-toggle="dropdown">
+                    <span class="caret"></span>
+                </button>
+                <ul class="dropdown-menu">
+                    @if (Session["cart"] != null)
+                    {
+                            foreach (Item item in (List<Item>)Session["cart"])
+                                {
+                                <li class="nav-item"><a class="nav-link" href="@Url.Action("RemoveFromCart","Productos",new { IdProducto = item.producto.IdProducto})">@item.producto.nombre_producto  - (@item.cantidad) <i class="fa fa-times"></i></a></li>
+                                <li class="divider"></li>
+                                }
+                     }
+                    else
+                    {
+                        <li class="nav-item"><a class="nav-link" href="#">Sin productos</a></li>
+                    }
+                    <li class="divider"></li>
+                    <li class="nav-item"><a class="nav-link" href="@Url.Action("Checkout", "Productos")">Ver Carrito</a></li>
+                </ul>
+            </div>
+            
+
+            <div class="dropdown">
+                <button class="btn btn-outline-dark dropdown-toggle fa fa-ellipsis-v" type="button" data-toggle="dropdown">
+                   <span class="caret"></span>
+                </button>
+                <ul class="dropdown-menu">
+                    @Html.Partial("_LoginPartial")
+                </ul>
+            </div>            
+        </nav>
+        <hr />
+    </header>
+
+
+    <div class="container-fluid">
+        @RenderBody()
+
+    </div>
+
+
+
+    <footer class="container-fluid">
+        <div class="row">
+            <div class="container menuFooter">
+                <div class="row section1">
+                    <div class="col-xl-4 col-lg-4 col-md-4 col-sm-4 text-center">
+                        <img src="~/Content/Images/logo.png" width="183px" />
+                    </div>
+                    <div class="col-xl-2 col-lg-2 col-md-2 col-sm-2 nav-item  text-center">
+                        <div class=" pr-5 pl-2  ">@Html.ActionLink("Contáctanos", "ContactUs", "Info", null, new { @class = "nav-link linkFooter text-secondary" })</div>
+                    </div>
+                    <div class="col-xl-2 col-lg-2 col-md-2 col-sm-2 nav-item  text-center">
+                        <div class="pr-5 pl-2  ">@Html.ActionLink("Políticas de privacidad", "Privacy", "Info", null, new { @class = "nav-link linkFooter text-secondary" })</div>
+                    </div>
+                    <div class="col-xl-2 col-lg-2 col-md-2 col-sm-2 nav-item  text-center">
+                        <div class="pr-5 pl-2  ">@Html.ActionLink("Términos de uso", "Terms", "Info", null, new { @class = "nav-link linkFooter text-secondary" })</div>
+                    </div>
+                    <div class="col-xl-2 col-lg-2 col-md-2 col-sm-2 nav-item  text-center">
+                        <div class=" pr-5 p-2">@Html.ActionLink("Sobre nosotros", "AboutUs", "Info", null, new { @class = "nav-link linkFooter text-secondary" })</div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row Container-footer">
+            <div class="col text-center">
+                <div class="footerText">© 2019. Todos los derechos reservados </div>
+            </div>
+            <div class="bg-dark" width="3px" height="3px">
+                <a href="#" id="back-to-top" title="Back to top"><i class="fas fa-chevron-up fa-lg"></i></a>
+            </div>
+        </div>
+    </footer>
+    @Scripts.Render("~/bundles/jquery")
+    @Scripts.Render("~/bundles/bootstrap")
+    @RenderSection("scripts", required: false)
+
+</body>
+
+
+</html>

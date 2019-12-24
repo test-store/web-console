@@ -1,0 +1,87 @@
+﻿@model FinalSite.DAL.Producto
+
+@{
+    ViewBag.Title = "Detalles del Producto";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+    <div class="container">
+        <h3 class="text-center text-uppercase">Detalles 
+        </h3>
+        <hr />
+        <div class="row">
+            <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                <div class="justify-content-center">
+                    <img src="~/ProductImg/@Model.Imagen" width="100%" class="img-responsive" />
+                </div>
+            </div>
+
+            <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                <h4 class="text-center text-dark">@Html.DisplayFor(model => model.nombre_producto)</h4>
+                <hr />
+                <div class="row text-left">
+                    <div class=" offset-2 col-md-10 col-sm-10 col-xs-10">
+                        <table class="table table-borderless">
+
+                            <tr class="col">
+                                <td class="px-auto py-auto"><h5 class="text-dark">Categoría</h5></td>
+                                <td class="px-auto py-auto">@Html.DisplayFor(model => model.Categoria.descripcion_categoria)</td>
+                            </tr>
+
+                            <tr class="col">
+                                <td class="px-auto py-auto"><h5 class="text-dark">Marca</h5></td>
+                                <td class="px-auto py-auto">@Html.DisplayFor(model => model.Brand.Descripcion_brand)</td>
+                            </tr>
+                            <tr class="col">
+                                <td class="px-auto py-auto"><h5 class="text-dark">Precio</h5></td>
+                                <td class="px-auto py-auto">S./ @Html.DisplayFor(model => model.precio)</td>
+                            </tr>
+                        </table>
+                    </div> <!-- col -->
+                </div> <!-- row-->
+                <div class="card-footer bg-transparent row">
+
+                    <div class="col-6 text-right" style="margin-left:10px; margin-right:-10px;">
+                        @using (Html.BeginForm("AddToCart", "Home", new { IdProducto = Model.IdProducto }, FormMethod.Post))
+                        {
+                        <button type="submit" class=" btn btn-dark">Añadir <i class="fa fa-shopping-cart"></i></button>
+                        }
+
+
+
+                    </div>
+                    <div class=" col-6 text-left" style="margin-left:-10px;">
+                        @Html.ActionLink("Comprar", "RealizarPago", "Home", new { IdProducto = Model.IdProducto }, new { @class = "agregar btn btn-dark" })
+                    </div>
+                 
+                </div>
+            </div>
+       </div>
+    
+
+    <div class="container">
+        <div class="row justify-content-center align-content-center">
+            <div class="col-lg-8 col-md-8 col-sm-10 col-xs-10">
+                <ul class="nav nav-tabs  navbar-expand" id="myTab" role="tablist">
+                    <li class="nav-item bg-dark">
+                        <a class="nav-link active" id="home-tab" data-toggle="tab" href="#Condiciones" role="tab" aria-controls="home" aria-selected="true">Condiciones de Uso</a>
+                    </li>
+                    <li class="nav-item bg-dark">
+                        <a class="nav-link" id="profile-tab" data-toggle="tab" href="#descripcionProducto" role="tab" aria-controls="profile" aria-selected="false">Descripción del Producto</a>
+                    </li>
+                </ul>
+
+                <div class="tab-content" id="DetailsProduct">
+                    <div class="tab-pane  fade show active" id="home" role="tabpanel" aria-labelledby="home-tab">
+                        @Html.DisplayFor(model => model.condiciones_uso)
+                    </div>
+                    <div class="tab-pane fade" id="profile" role="tabpanel" aria-labelledby="profile-tab">
+                        @Html.DisplayFor(model => model.descripcion_producto)
+                    </div>
+                 </div>
+
+            </div> <!-- Col-lg-6-->
+        </div> <!-- Row-->
+    </div>
+
+

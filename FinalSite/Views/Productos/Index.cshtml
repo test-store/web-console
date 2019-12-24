@@ -1,0 +1,54 @@
+﻿@model IEnumerable<FinalSite.DAL.Producto>
+@{
+    ViewBag.Title = "Listar Productos";
+}
+
+
+<div class="container">
+    <h3 class="text-center">Catálogo de Productos</h3>
+    <hr />
+    <div class="row">
+        @foreach (var item in Model)
+        {
+
+            <div class="col-lg-4 mb-4">
+                <div class="card">
+                    <div class="card-header bgCard">
+                        <h3 class="text-center">@item.nombre_producto</h3>
+                    </div>
+                    <div class="card-body text-sm-center text-md-center text-sm-center" style="margin-left:-10px;">
+                        <img src="~/ProductImg/@item.Imagen" width="100%" class="img-responsive" />
+
+                    </div>
+                    <div class="card-info">
+                        <h4 class="text-center">S./ @string.Format("{0:n2}",item.precio) </h4>
+                       
+                       
+                    </div>
+                 
+                    <div class="card-footer bg-transparent row">
+
+                        <div class="col-8 text-center">
+                            @Html.ActionLink("Detalles", "Details", new { IdProducto = item.IdProducto }, new { @class = "btn btn-dark" })
+                            @Html.ActionLink("Comprar", "RealizarPago", "Home", new { IdProducto = item.IdProducto }, new { @class = "agregar btn btn-dark" })
+
+
+                        </div>
+                        <div class=" col-4 text-md-center text-lg-center">
+                            @using (Html.BeginForm("AddToCart", "Productos", new { IdProducto = item.IdProducto }, FormMethod.Post))
+                            {
+                                <button type="submit" class="float-right btn btn-dark"><i class="fa fa-shopping-cart"></i></button>
+                            }
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+
+        }
+    </div>
+</div>
+
+
+
+

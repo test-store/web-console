@@ -1,0 +1,66 @@
+﻿@model IEnumerable<FinalSite.DAL.Producto>
+
+@{
+    ViewBag.Title = "AllProducts";
+    Layout = "~/Views/Shared/AdminLayout.cshtml";
+}
+
+<h2 class="text-center">Productos</h2>
+
+<p>
+    @Html.ActionLink("Crear", "Create")
+</p>
+<table class="table">
+    <tr>
+        <th>
+        Código de Tarjeta
+        </th>
+         
+        <th>
+            @Html.DisplayNameFor(model => model.Lote)
+        </th>
+        <th>
+            Producto
+        </th>
+        <th>
+            Precio
+        </th>
+        <th>
+            Marca
+        </th>
+        <th>
+            Categoría
+        </th>
+        <th></th>
+    </tr>
+
+@foreach (var item in Model) {
+    <tr>
+        <td>
+            @Html.DisplayFor(modelItem => item.descripcion_producto)
+        </td>
+        
+        <td>
+            @Html.DisplayFor(modelItem => item.Lote)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.nombre_producto)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.precio)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Brand.Descripcion_brand)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Categoria.descripcion_categoria)
+        </td>
+        <td class="d-none">
+            @Html.ActionLink("Edit", "Edit", new { id=item.IdProducto }) |
+            @Html.ActionLink("Details", "Details", new { id=item.IdProducto }) |
+            @Html.ActionLink("Delete", "Delete", new { id=item.IdProducto })
+        </td>
+    </tr>
+}
+
+</table>
