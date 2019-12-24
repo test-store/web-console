@@ -33,17 +33,17 @@ namespace FinalSite.Controllers
 
         }
         [HttpPost]
-        public ActionResult RealizarPagoList(Card c, List<int> idProductos)
+        public ActionResult RealizarPagoList(Card c)
         {
             List<Item> cart = (List<Item>)Session["cart"];
             if (cart != null)
             {
-               
+                               
             }
             return View();
         }
-
-        public ActionResult RealizarPagoList(List<Producto> lista, string mensaje)
+        [HttpGet]
+        public ActionResult RealizarPagoList(List<Producto> lista)
         {
             return View(lista);
         }

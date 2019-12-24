@@ -34,7 +34,7 @@
 
 
                         </div>
-                        <div class=" col-4 text-md-center text-lg-center">
+                        <div class="d-none col-4 text-md-center text-lg-center">
                             @using (Html.BeginForm("AddToCart", "Productos", new { IdProducto = item.IdProducto }, FormMethod.Post))
                             {
                                 <button type="submit" class="float-right btn btn-dark"><i class="fa fa-shopping-cart"></i></button>
