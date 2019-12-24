@@ -26,15 +26,22 @@ namespace FinalSite.Controllers
         }
         public ActionResult AllStocks()
         {
-            var results = from pr in context.Productoes
-                          join st  in context.Stocks on pr.IdProducto equals st.IdProducto
-                          join usr in context.AspNetUsers on st.IdUsuario equals usr.IdUsuario
-                          where (pr.IdProducto == st.IdProducto) && (usr.IdUsuario == st.IdUsuario) && (st.estado =="no disponible") 
-                          select new { Id = st.IdStock, Producto_Detalle = pr.descripcion_producto, precio= pr.precio, Usuario=usr.UserName, Fecha=st.fecha_venta, st.estado };
+            List<StockIndexViewModel> results = (from pr in context.Productoes
+                                                 join st in context.Stocks on pr.IdProducto equals st.IdProducto
+                                                 join usr in context.AspNetUsers on st.IdUsuario equals usr.IdUsuario
+                                                 select new StockIndexViewModel()
+                                                 {
+                                                     IdStock = st.IdStock,
+                                                     detalle_producto = pr.descripcion_producto,
+                                                     precio = pr.precio,
+                                                     Username = usr.UserName,
+                                                     fecha_venta = st.fecha_venta,
+                                                     estado = st.estado
+                                                 }).ToList();
 
 
-            return  View(results.ToList());
-            
+            return View(results);
+
         }
         public ActionResult AllProducts()
         {

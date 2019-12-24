@@ -23,7 +23,7 @@ namespace FinalSite.Controllers
         }
 
 
-      
+
         #region culqi
         [HttpGet]
         public ActionResult RealizarPago(int IdProducto, string mensaje)
@@ -77,11 +77,19 @@ namespace FinalSite.Controllers
             if ((string)json_response["outcome"]["type"] == "venta_exitosa")
             {
                 //hilo enviar correo task
+
+                Pago oPago = db.Pagoes.Add(new Pago()
+                {
+                    descripción_pago = (string)json_response["id"],
+                    Observaciones = (string)json_response["outcome"]["merchant_message"]
+                });
+                int IdStock = db.ActualizarStock(null, userId, oPago.IdPago, "NO DISPONIBLE", "", DateTime.Now, Convert.ToString(producto.precio ?? 0));
+
                 return RedirectToAction("CompraCorrecta", new { mensaje = (string)json_response["outcome"]["user_message"] });
             }
             else
             {
-                return RedirectToAction("RealizarPago", new { IdProducto = IdProducto, mensaje="Ocurrieron algunos probemas al reaclizar la transacion." });
+                return RedirectToAction("RealizarPago", new { IdProducto = IdProducto, mensaje = "Ocurrieron algunos probemas al reaclizar la transacion." });
             }
         }
         public ActionResult CompraCorrecta(string mensaje)
