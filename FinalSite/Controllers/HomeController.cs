@@ -33,6 +33,21 @@ namespace FinalSite.Controllers
             return View(producto);
 
         }
+        [HttpPost]
+        public ActionResult RealizarPagoList(String UserName)
+        {
+            List<Item> cart = (List<Item>)Session["cart"];
+            if (cart != null)
+            {
+                return RedirectToAction("RealizarPago", new { cart, UserName });
+            }
+            return View();
+        }
+
+        public ActionResult RealizarPagoList()
+        {
+            return View();
+        }
 
         [HttpPost]
         public ActionResult RealizarPago(Card card, int IdProducto)

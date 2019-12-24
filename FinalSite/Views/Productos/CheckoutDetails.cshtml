@@ -1,10 +1,13 @@
 ﻿@using FinalSite.Models.Home;
 @using FinalSite.DAL;
+@model IEnumerable<FinalSite.Models.Home.Item>
+@using Microsoft.AspNet.Identity
 
 
 @{
     ViewBag.Title = "Detalles de pago";
     Layout = "~/Views/Shared/_Layout.cshtml";
+    
 }
 
 @if (Session["cart"] == null)
@@ -15,42 +18,43 @@
 
 }
 
-//var userId = db.AspNetUsers.Find(User.Identity.GetUserId()).IdUsuario;
+
 
 else
 {
-<table class="table table-bordered">
-    <thead>
-        <tr>
-            <th>Producto</th>
-            <th>Precio</th>
-            <th>Cantidad</th>
-            <th>Sub total</th>
-
-        </tr>
-    </thead>
-    <tbody>
-        @{
-            int Total = 0;
-        }
-        @foreach (Item item in (List<Item>)Session["cart"])
-        {
-            int lineTotal = Convert.ToInt32(item.cantidad * item.producto.precio);
-            Total = Convert.ToInt32(@Total + lineTotal);
+    <table class="table table-bordered">
+        <thead>
             <tr>
-                <td>@item.producto.nombre_producto</td>
-                <td>@string.Format("{0:n2}", item.producto.precio)</td>
-                <td>@item.cantidad</td>
-                <td>@lineTotal</td>
-            </tr>
-        }
+                <th>Producto</th>
+                <th>Precio</th>
+                <th>Cantidad</th>
+                <th>Sub total</th>
 
-        <tr>
-            <td colspan="4" class="text-right" id="Value"><b>@string.Format("{0:n2}", Total)</b></td>
-        </tr>
-    </tbody>
-</table>
-<button id="buy" class="btn btn-dark">Pagar S./ @string.Format("{0:n2}", Total) >></button>
+            </tr>
+        </thead>
+        <tbody>
+            @{
+                int Total = 0;
+            }
+            @foreach (Item item in (List<Item>)Session["cart"])
+            {
+                int lineTotal = Convert.ToInt32(item.cantidad * item.producto.precio);
+                Total = Convert.ToInt32(@Total + lineTotal);
+                <tr>
+                    <td>@item.producto.nombre_producto</td>
+                    <td>@string.Format("{0:n2}", item.producto.precio)</td>
+                    <td>@item.cantidad</td>
+                    <td>@lineTotal</td>
+                </tr>
+            }
+
+            <tr>
+                <td colspan="4" class="text-right" id="Value"><b>@string.Format("{0:n2}", Total)</b></td>
+            </tr>
+        </tbody>
+    </table>
+    <button id="buy" class="btn btn-dark">Pagar S./ @string.Format("{0:n2}", Total) >></button>
+    @Html.ActionLink("Realizar Pago", "RealizarPagoList", new { UserName = @User.Identity.GetUserName() })
 
 }
 @section Scripts

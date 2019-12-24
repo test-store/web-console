@@ -8,7 +8,7 @@
 
 <h2 class="text-center">Inventario</h2>
 
-<table class="table">
+<table class="table table-responsive table-hover">
     <tr>
         <th>
             Id
@@ -33,31 +33,31 @@
 
     @foreach (var item in Model)
     {
-<tr>
-    <td>
-        @item.IdStock
-    </td>
-    <td>
-        @item.detalle_producto
-    </td>
-    <td>
-        @string.Format("{0:n2}", item.precio)
-    </td>
-    <td>
-        @item.Username
-    </td>
-    <td>
-        @item.fecha_venta
-    </td>
-    <td>
-        @item.estado
-    </td>
-    <td>
-        @Html.ActionLink("Edit", "Edit", new { id = item.IdStock }) |
-        @Html.ActionLink("Details", "Details", new { id = item.IdStock }) |
-        @Html.ActionLink("Delete", "Delete", new { id = item.IdStock })
-    </td>
-</tr>
+        <tr>
+            <td>
+                @item.IdStock
+            </td>
+            <td>
+                @item.detalle_producto
+            </td>
+            <td>
+                @string.Format("{0:n2}", item.precio)
+            </td>
+            <td>
+                @item.Username
+            </td>
+            <td>
+                @item.fecha_venta
+            </td>
+            <td>
+                @item.estado
+            </td>
+            <td>
+                @Html.ActionLink("Edit", "Edit", new { id = item.IdStock }) |
+                @Html.ActionLink("Details", "Details", new { id = item.IdStock }) |
+                @Html.ActionLink("Delete", "Delete", new { id = item.IdStock })
+            </td>
+        </tr>
     }
 
 </table>
