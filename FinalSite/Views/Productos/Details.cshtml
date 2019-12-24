@@ -41,7 +41,7 @@
                 </div> <!-- row-->
                 <div class="card-footer bg-transparent row">
 
-                    <div class="col-6 text-right" style="margin-left:10px; margin-right:-10px;">
+                    <div class=" d-none col-6 text-right" style="margin-left:10px; margin-right:-10px;">
                         @using (Html.BeginForm("AddToCart", "Home", new { IdProducto = Model.IdProducto }, FormMethod.Post))
                         {
                         <button type="submit" class=" btn btn-dark">Añadir <i class="fa fa-shopping-cart"></i></button>

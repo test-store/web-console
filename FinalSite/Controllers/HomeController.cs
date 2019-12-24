@@ -121,8 +121,8 @@ namespace FinalSite.Controllers
         private Security security()
         {
             Security security = new Security();
-            security.public_key = "pk_test_MU4roRrGcONMAEuf";
-            security.secret_key = "sk_test_LJuAeavC6tc8rYyi";
+            security.public_key = "pk_live_gZSli9WajesA88Lw";
+            security.secret_key = "sk_live_OGCBov4mx7FQe0Mt";
             return security;
         }
 
