@@ -12,6 +12,7 @@ using FinalSite.DAL;
 
 namespace FinalSite.Controllers
 {
+    //[Authorize(Roles="Admin")]
     public class AdminController : Controller
     {
         DataBaseTestEntities context = new DataBaseTestEntities();
