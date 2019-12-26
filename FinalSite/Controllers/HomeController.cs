@@ -126,8 +126,8 @@ namespace FinalSite.Controllers
             security.secret_key = "sk_test_LJuAeavC6tc8rYyi";
             return security;
         }
-         //"pk_live_gZSli9WajesA88Lw"
-            //"sk_live_OGCBov4mx7FQe0Mt"
+         //"pk_live_gZSl"
+            //"sk_live_OGCB"
 
         //sk_test_LJuAeavC6tc8rYyi
         //pk_test_MU4roRrGcONMAEuf
