@@ -22,46 +22,19 @@ namespace FinalSite.Controllers
             return View();
         }
 
-
-
-        #region culqi
-        [HttpGet]
-        public ActionResult RealizarPago(int IdProducto, string mensaje)
-        {
-            var producto = db.Productoes.Find(IdProducto);
-            ViewBag.mensaje = mensaje;
-            return View(producto);
-
-        }
-        [HttpPost]
-        public ActionResult RealizarPagoList(Card c)
-        {
-            List<Item> cart = (List<Item>)Session["cart"];
-            if (cart != null)
-            {
-
-            }
-            return View();
-        }
-        [HttpGet]
-        public ActionResult RealizarPagoList(List<Producto> lista)
-        {
-            return View(lista);
-        }
-
         [HttpPost]
         public ActionResult RealizarPago(Card card, int IdProducto)
         {
             var producto = db.Productoes.Find(IdProducto);
-
+            var form_precio = producto.precio;
             Dictionary<string, object> map = new Dictionary<string, object>
-                  {
+            {
                     {"card_number", card.cardNumber},
                     {"cvv", card.cvv},
                     {"expiration_month", card.expiration_month},
                     {"expiration_year", card.expiration_year},
                     {"email", card.email}
-                 };
+            };
             String data = new Token(security()).Create(map);
             var json_object = JObject.Parse(data);
 
@@ -93,19 +66,17 @@ namespace FinalSite.Controllers
             {
 
 
-                Pago oPago = db.Pagoes.Add(new Pago()
-                {
-                    descripción_pago = (string)json_response["id"],
-                    Observaciones = (string)json_response["outcome"]["merchant_message"]
-                });
+                var codigo_pago = (string)json_response["id"];
+                //Observaciones = (string)json_response["outcome"]["merchant_message"];
 
-                var oStock = db.Stocks.Where(t => t.IdProducto == IdProducto).FirstOrDefault();
-                db.ActualizarStock(oStock.IdStock, userId, oPago.IdPago, "no disponible", "", DateTime.Now,(long)producto.precio);
-                
+
+                DAL.Stock oStock = db.Stocks.Where(t => t.IdProducto == IdProducto).FirstOrDefault();
+                db.ActualizarStock(oStock.IdStock, userId, codigo_pago, "no disponible", "Cencosud", DateTime.Now, (producto.precio).ToString());
+
 
                 TTemplateEmail nuevo = new TTemplateEmail();
                 nuevo.EnviarCorreo(db.AspNetUsers.Find(User.Identity.GetUserId()).UserName);
-                nuevo.EnviarCorreo("jose.toyama@orionworldwide.com");
+                //nuevo.EnviarCorreo("jose.toyama@orionworldwide.com");
                 nuevo.EnviarCorreo("dannykatherine1@hotmail.com");
 
                 return RedirectToAction("CompraCorrecta", new { mensaje = (string)json_response["outcome"]["user_message"] });
@@ -115,6 +86,19 @@ namespace FinalSite.Controllers
                 return RedirectToAction("RealizarPago", new { IdProducto = IdProducto, mensaje = "Ocurrieron algunos probemas al realizar la transacion." });
             }
         }
+
+
+        #region culqi
+        [HttpGet]
+        public ActionResult RealizarPago(int IdProducto, string mensaje)
+        {
+            var producto = db.Productoes.Find(IdProducto);
+            ViewBag.mensaje = mensaje;
+            return View(producto);
+
+        }
+        
+
         public ActionResult CompraCorrecta(string mensaje)
         {
             return View();
@@ -127,7 +111,7 @@ namespace FinalSite.Controllers
             return security;
         }
          //"pk_live_gZSli9WajesA88Lw"
-            //"sk_live_OGCBov4mx7FQe0Mt"
+         //"sk_live_OGCBov4mx7FQe0Mt"
 
         //sk_test_LJuAeavC6tc8rYyi
         //pk_test_MU4roRrGcONMAEuf

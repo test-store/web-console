@@ -1,0 +1,66 @@
+﻿@using FinalSite.Models.Home;
+@using FinalSite.DAL;
+@using Microsoft.AspNet.Identity
+@model IEnumerable<FinalSite.Models.Home.Item>
+
+<div class="container">
+    <div class="row">
+        <div class="col-7">
+            <h4 class="text-center"> Datos de Compra</h4>
+            <div class="bg-light pl-2 pr-2">
+                @using (Html.BeginForm("RealizarPago", "Home", FormMethod.Post))
+                {
+                    if (Session["cart"] != null)
+                    {
+                        
+                    }
+                    @Html.AntiForgeryToken()
+                    <hr />
+                    
+                    <div class="form-group">
+                        <label for="correo">Correo electrónico</label>
+                        <input type="email" class="form-control" name="email" id="card[email]" data-culqi="[email]" aria-describedby="emailHelp" placeholder="alguien@correo.com">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="correo">Número de tarjeta </label>
+                        <input type="text" class="form-control" name="cardNumber" id="card[number]" data-culqi="card[number]" aria-describedby="NumberCard" placeholder="4111-5668-6666-9988">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="cvv">CVV </label>
+                        <input type="text" class="form-control" name="cvv" data-culqi="card[cvv]" id="card[cvv]" aria-describedby="CVV" placeholder="326">
+                    </div>
+
+                    <h6>Fecha de expiración</h6>
+
+                    <div class="form-group">
+                        <div class="row">
+
+                            <div class="col-6">
+                                <label for="Month">Mes </label>
+                                <input type="number" name="expiration_month" class="form-control" data-culqi="card[exp_month]" id="card[exp_month]" aria-describedby="Month" placeholder="MM">
+                            </div>
+                            <div class="col-6">
+                                <label for="year">Año </label>
+                                <input type="number" name="expiration_year" class="form-control" data-culqi="card[exp_year]" id="card[exp_year]" aria-describedby="Year" placeholder="YYYY">
+                            </div>
+                        </div>
+                    </div>
+
+                    //<button type="submit" class="btn btn-dark" id="btn-pagar">Pagar S./ @string.Format("{0:n2}")</button>
+
+                }
+                <hr />
+            </div>
+            <div class="pt-2 mt-2 bg-light">
+                <img src="~/Images/cards.jpg" alt="Alternate Text" class="img-responsive" width="30%" />
+                <span>¡Aceptamos todas tus tarjetas!</span>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+

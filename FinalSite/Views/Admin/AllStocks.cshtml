@@ -10,54 +10,50 @@
 
 <table class="table table-responsive table-hover">
     <tr>
-        <th>
-            Id
-        </th>
-        <th>
-            Detalle Producto
-        </th>
-        <th>
-            Precio
-        </th>
-        <th>
-            Usuario
-        </th>
-        <th>
-            Fecha
-        </th>
-        <th>
-            Estado
-        </th>
+        <th>Id Stock</th>
+        <th>Producto</th>
+        <th>Estado</th>
+        <th>Precio</th>
+        <th>Usuario</th>
+        <th>Fecha venta</th>
+        <th>Código de pago</th>
+        <th>Código BP</th>
         <th></th>
     </tr>
 
     @foreach (var item in Model)
     {
-        <tr>
-            <td>
-                @item.IdStock
-            </td>
-            <td>
-                @item.detalle_producto
-            </td>
-            <td>
-                @string.Format("{0:n2}", item.precio)
-            </td>
-            <td>
-                @item.Username
-            </td>
-            <td>
-                @item.fecha_venta
-            </td>
-            <td>
-                @item.estado
-            </td>
-            <td>
-                @Html.ActionLink("Edit", "Edit", new { id = item.IdStock }) |
-                @Html.ActionLink("Details", "Details", new { id = item.IdStock }) |
-                @Html.ActionLink("Delete", "Delete", new { id = item.IdStock })
-            </td>
-        </tr>
+  <tr>
+    <td>
+        @item.IdStock
+    </td>
+    <td>
+        @item.descripcion_producto
+    </td>
+    <td>
+        @item.estado
+    </td>
+    <td>
+        @string.Format("{0:n2}", item.precio)
+    </td>
+    <td>
+        @item.Username
+    </td>
+    <td>
+        @item.fecha_venta
+    </td>
+    <td>
+        @item.codigo_pago
+    </td>
+    <td>
+        @item.codigoBP
+    </td>
+    <td class="d-none">
+        @Html.ActionLink("Edit", "Edit", new { id = item.IdStock }) |
+        @Html.ActionLink("Details", "Details", new { id = item.IdStock }) |
+        @Html.ActionLink("Delete", "Delete", new { id = item.IdStock })
+    </td>
+</tr>
     }
 
 </table>

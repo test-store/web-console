@@ -3,106 +3,49 @@
 @model IEnumerable<FinalSite.Models.Home.Item>
 @using Microsoft.AspNet.Identity
 
-
-@{
-    ViewBag.Title = "Detalles de pago";
-    Layout = "~/Views/Shared/_Layout.cshtml";
-    
-}
-
 @if (Session["cart"] == null)
-{
-    <div class="alert alert-danger">
-        <strong>Ningún producto agregado</strong>
-    </div>
-
-}
-
-
+    {
+        <div class="alert alert-danger">
+            <strong>Ningún producto agregado</strong>
+        </div>
+    }
 
 else
 {
-    <table class="table table-bordered">
-        <thead>
+
+<table class="table table-bordered table-responsive-md table-hover">
+    <thead>
+        <tr>
+            <th>Producto</th>
+            <th>Precio</th>
+            <th>Cantidad</th>
+            <th>Sub total</th>
+        </tr>
+    </thead>
+    <tbody>
+        @{
+            int Total = 0;
+            
+        }
+
+        @foreach (Item item in (List<Item>)Session["cart"])
+        {
+            int lineTotal = Convert.ToInt32(item.cantidad * item.producto.precio);
+            Total = Convert.ToInt32(@Total + lineTotal);
             <tr>
-                <th>Producto</th>
-                <th>Precio</th>
-                <th>Cantidad</th>
-                <th>Sub total</th>
-
+                <td>@item.producto.nombre_producto</td>
+                <td>@string.Format("{0:n2}", item.producto.precio)</td>
+                <td>@item.cantidad</td>
+                <td>@lineTotal</td>
             </tr>
-        </thead>
-        <tbody>
-            @{
-                int Total = 0;
-            }
-            @foreach (Item item in (List<Item>)Session["cart"])
-            {
-                int lineTotal = Convert.ToInt32(item.cantidad * item.producto.precio);
-                Total = Convert.ToInt32(@Total + lineTotal);
-                <tr>
-                    <td>@item.producto.nombre_producto</td>
-                    <td>@string.Format("{0:n2}", item.producto.precio)</td>
-                    <td>@item.cantidad</td>
-                    <td>@lineTotal</td>
-                </tr>
-            }
+        }
 
-            <tr>
-                <td colspan="4" class="text-right" id="Value"><b>@string.Format("{0:n2}", Total)</b></td>
-            </tr>
-        </tbody>
-    </table>
-    <button id="buy" class="btn btn-dark">Pagar S./ @string.Format("{0:n2}", Total) >></button>
-    @Html.ActionLink("Realizar Pago", "RealizarPagoList", new { UserName = @User.Identity.GetUserName() })
+        <tr>
+            <td colspan="4" class="text-right" id="Value"><b>S./ @string.Format("{0:n2}", Total)</b></td>
+        </tr>
+    </tbody>
+</table>
+@*<button id="buy" class="btn btn-dark">Pagar S./ @string.Format("{0:n2}", Total) >></button>*@
+<a class="btn btn-dark" href="@Url.Action("RealizarPagoList","Productos")">Pagar S./ @string.Format("{0:n2}", Total)>></a>
 
-}
-@section Scripts
-{
-    <script>
-        var monto = $("#Value").text();
-        console.log(monto)
-        console.log(typeof monto)
-    Culqi.publicKey = 'pk_test_MU4roRrGcONMAEuf';
-
-    Culqi.settings({
-        title: 'Venta de Gift Cards',
-        currency: 'PEN',
-        description: 'Gift Cards',
-        amount: monto*100
-
-    });
-
-    $('#buy').on('click', function(e) {
-        Culqi.open();
-        e.preventDefault();
-    });
-
-        function culqi() {
-            if (Culqi.token) {
-                var token = Culqi.token.id;
-                var email = Culqi.token.email;
-                var url = "@Url.Action("CheckoutDetails","Productos")";
-                var data = {
-                    producto: "Gift Cards",
-                    customer_id: 1,
-                    email: email
-
-                }
-                $.post(url, data, function(e){
-                    alert(' Tu pago se Realizó con exito, Agradecemos tu preferencia.');
-                    if (res == "exito") {
-                        pdf();
-                    } else {
-                        alert("No se logró realizar el pago.");
-                    }
-                });
-
-            }
-            else {
-                console.log(Culqi.error);
-                alert(Culqi.error);
-            }
-        };
-    </script>
 }

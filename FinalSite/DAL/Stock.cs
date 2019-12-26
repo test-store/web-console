@@ -17,13 +17,13 @@ namespace FinalSite.DAL
         public int IdStock { get; set; }
         public Nullable<int> IdProducto { get; set; }
         public Nullable<int> IdUsuario { get; set; }
-        public Nullable<int> IdPago { get; set; }
         public string estado { get; set; }
         public string CodigoBP { get; set; }
         public Nullable<System.DateTime> fecha_venta { get; set; }
-        public Nullable<long> monto_pagado { get; set; }
+        public string monto_pagado { get; set; }
+        public Nullable<decimal> monto { get; set; }
+        public string codigo_pago { get; set; }
     
-        public virtual Pago Pago { get; set; }
         public virtual Producto Producto { get; set; }
     }
 }

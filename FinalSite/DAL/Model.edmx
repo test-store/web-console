@@ -83,14 +83,6 @@
           <Property Name="descripcion_categoria" Type="nvarchar" MaxLength="50" Nullable="false" />
           <Property Name="grupo" Type="nvarchar" MaxLength="50" Nullable="false" />
         </EntityType>
-        <EntityType Name="Pago">
-          <Key>
-            <PropertyRef Name="IdPago" />
-          </Key>
-          <Property Name="IdPago" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-          <Property Name="descripción_pago" Type="varchar" MaxLength="50" />
-          <Property Name="Observaciones" Type="varchar" MaxLength="30" />
-        </EntityType>
         <EntityType Name="Producto">
           <Key>
             <PropertyRef Name="IdProducto" />
@@ -103,7 +95,7 @@
           <Property Name="IdBrand" Type="int" Nullable="false" />
           <Property Name="Imagen" Type="varchar(max)" />
           <Property Name="Lote" Type="nchar" MaxLength="10" />
-          <Property Name="precio" Type="numeric" Precision="18" Scale="2" />
+          <Property Name="precio" Type="decimal" Precision="18" Scale="2" />
         </EntityType>
         <EntityType Name="Stock">
           <Key>
@@ -112,11 +104,12 @@
           <Property Name="IdStock" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="IdProducto" Type="int" />
           <Property Name="IdUsuario" Type="int" />
-          <Property Name="IdPago" Type="int" />
           <Property Name="estado" Type="nvarchar" MaxLength="25" />
           <Property Name="CodigoBP" Type="nvarchar" MaxLength="50" />
           <Property Name="fecha_venta" Type="datetime" />
-          <Property Name="monto_pagado" Type="numeric" Precision="18" Scale="2" />
+          <Property Name="monto_pagado" Type="varchar" MaxLength="50" />
+          <Property Name="monto" Type="decimal" Precision="18" Scale="2" />
+          <Property Name="codigo_pago" Type="varchar" MaxLength="50" />
         </EntityType>
         <EntityType Name="sysdiagrams">
           <Key>
@@ -220,18 +213,6 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK_Stock_to_Pago">
-          <End Role="Pago" Type="Self.Pago" Multiplicity="0..1" />
-          <End Role="Stock" Type="Self.Stock" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Pago">
-              <PropertyRef Name="IdPago" />
-            </Principal>
-            <Dependent Role="Stock">
-              <PropertyRef Name="IdPago" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
         <!--Errors Found During Generation:
 warning 6035: The relationship 'FK_Stock_toAspNetUsers' has columns that are not part of the key of the table on the primary side of the relationship. The relationship was excluded.
         <Association Name="FK_Stock_toAspNetUsers" />-->
@@ -250,11 +231,11 @@ warning 6035: The relationship 'FK_Stock_toAspNetUsers' has columns that are not
         <Function Name="ActualizarStock" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="IdStock" Type="int" Mode="In" />
           <Parameter Name="IdUsuario" Type="int" Mode="In" />
-          <Parameter Name="IdPago" Type="int" Mode="In" />
           <Parameter Name="estado" Type="nvarchar" Mode="In" />
+          <Parameter Name="codigo_pago" Type="nvarchar" Mode="In" />
           <Parameter Name="CodigoBP" Type="nvarchar" Mode="In" />
           <Parameter Name="fecha_venta" Type="datetime" Mode="In" />
-          <Parameter Name="monto_pagado" Type="bigint" Mode="In" />
+          <Parameter Name="monto_pagado" Type="varchar" Mode="In" />
         </Function>
         <Function Name="ConsultarProductos" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
         <Function Name="fn_diagramobjects" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="true" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" ReturnType="int" />
@@ -300,7 +281,6 @@ warning 6035: The relationship 'FK_Stock_toAspNetUsers' has columns that are not
           <EntitySet Name="Brand" EntityType="Self.Brand" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="BusinessPartner" EntityType="Self.BusinessPartner" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Categoria" EntityType="Self.Categoria" Schema="dbo" store:Type="Tables" />
-          <EntitySet Name="Pago" EntityType="Self.Pago" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Producto" EntityType="Self.Producto" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Stock" EntityType="Self.Stock" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="sysdiagrams" EntityType="Self.sysdiagrams" Schema="dbo" store:Type="Tables" />
@@ -332,10 +312,6 @@ warning 6035: The relationship 'FK_Stock_toAspNetUsers' has columns that are not
             <End Role="Categoria" EntitySet="Categoria" />
             <End Role="Producto" EntitySet="Producto" />
           </AssociationSet>
-          <AssociationSet Name="FK_Stock_to_Pago" Association="Self.FK_Stock_to_Pago">
-            <End Role="Pago" EntitySet="Pago" />
-            <End Role="Stock" EntitySet="Stock" />
-          </AssociationSet>
           <AssociationSet Name="FK_Stock_toProducto" Association="Self.FK_Stock_toProducto">
             <End Role="Producto" EntitySet="Producto" />
             <End Role="Stock" EntitySet="Stock" />
@@ -345,183 +321,15 @@ warning 6035: The relationship 'FK_Stock_toAspNetUsers' has columns that are not
     <!-- CSDL content -->
     <edmx:ConceptualModels>
       <Schema Namespace="DataBaseTestModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
-        <EntityType Name="AspNetRole">
-          <Key>
-            <PropertyRef Name="Id" />
-          </Key>
-          <Property Name="Id" Type="String" MaxLength="128" FixedLength="false" Unicode="true" Nullable="false" />
-          <Property Name="Name" Type="String" MaxLength="256" FixedLength="false" Unicode="true" Nullable="false" />
-          <NavigationProperty Name="AspNetUsers" Relationship="Self.AspNetUserRoles" FromRole="AspNetRoles" ToRole="AspNetUsers" />
-        </EntityType>
-        <EntityType Name="AspNetUserClaim">
-          <Key>
-            <PropertyRef Name="Id" />
-          </Key>
-          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="UserId" Type="String" MaxLength="128" FixedLength="false" Unicode="true" Nullable="false" />
-          <Property Name="ClaimType" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
-          <Property Name="ClaimValue" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
-          <NavigationProperty Name="AspNetUser" Relationship="Self.FK_dbo_AspNetUserClaims_dbo_AspNetUsers_UserId" FromRole="AspNetUserClaims" ToRole="AspNetUsers" />
-        </EntityType>
-        <EntityType Name="AspNetUserLogin">
-          <Key>
-            <PropertyRef Name="LoginProvider" />
-            <PropertyRef Name="ProviderKey" />
-            <PropertyRef Name="UserId" />
-          </Key>
-          <Property Name="LoginProvider" Type="String" MaxLength="128" FixedLength="false" Unicode="true" Nullable="false" />
-          <Property Name="ProviderKey" Type="String" MaxLength="128" FixedLength="false" Unicode="true" Nullable="false" />
-          <Property Name="UserId" Type="String" MaxLength="128" FixedLength="false" Unicode="true" Nullable="false" />
-          <NavigationProperty Name="AspNetUser" Relationship="Self.FK_dbo_AspNetUserLogins_dbo_AspNetUsers_UserId" FromRole="AspNetUserLogins" ToRole="AspNetUsers" />
-        </EntityType>
-        <EntityType Name="AspNetUser">
-          <Key>
-            <PropertyRef Name="Id" />
-          </Key>
-          <Property Name="Id" Type="String" MaxLength="128" FixedLength="false" Unicode="true" Nullable="false" />
-          <Property Name="IdUsuario" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="Email" Type="String" MaxLength="256" FixedLength="false" Unicode="true" />
-          <Property Name="EmailConfirmed" Type="Boolean" Nullable="false" />
-          <Property Name="PasswordHash" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
-          <Property Name="SecurityStamp" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
-          <Property Name="PhoneNumber" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
-          <Property Name="PhoneNumberConfirmed" Type="Boolean" Nullable="false" />
-          <Property Name="TwoFactorEnabled" Type="Boolean" Nullable="false" />
-          <Property Name="LockoutEndDateUtc" Type="DateTime" Precision="3" />
-          <Property Name="LockoutEnabled" Type="Boolean" Nullable="false" />
-          <Property Name="AccessFailedCount" Type="Int32" Nullable="false" />
-          <Property Name="UserName" Type="String" MaxLength="256" FixedLength="false" Unicode="true" Nullable="false" />
-          <Property Name="estado" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
-          <NavigationProperty Name="AspNetUserClaims" Relationship="Self.FK_dbo_AspNetUserClaims_dbo_AspNetUsers_UserId" FromRole="AspNetUsers" ToRole="AspNetUserClaims" />
-          <NavigationProperty Name="AspNetUserLogins" Relationship="Self.FK_dbo_AspNetUserLogins_dbo_AspNetUsers_UserId" FromRole="AspNetUsers" ToRole="AspNetUserLogins" />
-          <NavigationProperty Name="AspNetRoles" Relationship="Self.AspNetUserRoles" FromRole="AspNetUsers" ToRole="AspNetRoles" />
-        </EntityType>
-        <EntityType Name="Brand">
-          <Key>
-            <PropertyRef Name="IdBrand" />
-          </Key>
-          <Property Name="IdBrand" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="Descripcion_brand" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
-          <Property Name="IdBusinessPartner" Type="Int32" Nullable="false" />
-          <NavigationProperty Name="BusinessPartner" Relationship="Self.FK_Brand_ToBusinessPartner" FromRole="Brand" ToRole="BusinessPartner" />
-          <NavigationProperty Name="Productoes" Relationship="DataBaseTestModel.FK_Producto_toBrand" FromRole="Brand" ToRole="Producto" />
-        </EntityType>
-        <EntityType Name="BusinessPartner">
-          <Key>
-            <PropertyRef Name="IdBusinessPartner" />
-          </Key>
-          <Property Name="IdBusinessPartner" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="RUC" Type="String" MaxLength="11" FixedLength="true" Unicode="true" Nullable="false" />
-          <Property Name="razon_social" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
-          <Property Name="fecha_alta" Type="DateTime" Nullable="false" Precision="0" />
-          <NavigationProperty Name="Brands" Relationship="Self.FK_Brand_ToBusinessPartner" FromRole="BusinessPartner" ToRole="Brand" />
-        </EntityType>
-        <EntityType Name="Categoria">
-          <Key>
-            <PropertyRef Name="IdCategoria" />
-          </Key>
-          <Property Name="IdCategoria" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="descripcion_categoria" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
-          <Property Name="grupo" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
-          <NavigationProperty Name="Productoes" Relationship="DataBaseTestModel.FK_Producto_toCategoria" FromRole="Categoria" ToRole="Producto" />
-        </EntityType>
-        <EntityType Name="Pago">
-          <Key>
-            <PropertyRef Name="IdPago" />
-          </Key>
-          <Property Name="IdPago" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="descripción_pago" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
-          <Property Name="Observaciones" Type="String" MaxLength="30" FixedLength="false" Unicode="false" />
-          <NavigationProperty Name="Stocks" Relationship="DataBaseTestModel.FK_Stock_to_Pago" FromRole="Pago" ToRole="Stock" />
-        </EntityType>
-        <EntityType Name="sysdiagram">
-          <Key>
-            <PropertyRef Name="diagram_id" />
-          </Key>
-          <Property Name="name" Type="String" MaxLength="128" FixedLength="false" Unicode="true" Nullable="false" />
-          <Property Name="principal_id" Type="Int32" Nullable="false" />
-          <Property Name="diagram_id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="version" Type="Int32" />
-          <Property Name="definition" Type="Binary" MaxLength="Max" FixedLength="false" />
-        </EntityType>
-        <Association Name="FK_dbo_AspNetUserClaims_dbo_AspNetUsers_UserId">
-          <End Role="AspNetUsers" Type="Self.AspNetUser" Multiplicity="1">
-            <OnDelete Action="Cascade" />
-          </End>
-          <End Role="AspNetUserClaims" Type="Self.AspNetUserClaim" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="AspNetUsers">
-              <PropertyRef Name="Id" />
-            </Principal>
-            <Dependent Role="AspNetUserClaims">
-              <PropertyRef Name="UserId" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_dbo_AspNetUserLogins_dbo_AspNetUsers_UserId">
-          <End Role="AspNetUsers" Type="Self.AspNetUser" Multiplicity="1">
-            <OnDelete Action="Cascade" />
-          </End>
-          <End Role="AspNetUserLogins" Type="Self.AspNetUserLogin" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="AspNetUsers">
-              <PropertyRef Name="Id" />
-            </Principal>
-            <Dependent Role="AspNetUserLogins">
-              <PropertyRef Name="UserId" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_Brand_ToBusinessPartner">
-          <End Role="BusinessPartner" Type="Self.BusinessPartner" Multiplicity="1" />
-          <End Role="Brand" Type="Self.Brand" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="BusinessPartner">
-              <PropertyRef Name="IdBusinessPartner" />
-            </Principal>
-            <Dependent Role="Brand">
-              <PropertyRef Name="IdBusinessPartner" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="AspNetUserRoles">
-          <End Role="AspNetRoles" Type="Self.AspNetRole" Multiplicity="*" />
-          <End Role="AspNetUsers" Type="Self.AspNetUser" Multiplicity="*" />
-        </Association>
         <EntityContainer Name="DataBaseTestEntities" annotation:LazyLoadingEnabled="true">
-          <EntitySet Name="AspNetRoles" EntityType="Self.AspNetRole" />
-          <EntitySet Name="AspNetUserClaims" EntityType="Self.AspNetUserClaim" />
-          <EntitySet Name="AspNetUserLogins" EntityType="Self.AspNetUserLogin" />
-          <EntitySet Name="AspNetUsers" EntityType="Self.AspNetUser" />
-          <EntitySet Name="Brands" EntityType="Self.Brand" />
-          <EntitySet Name="BusinessPartners" EntityType="Self.BusinessPartner" />
-          <EntitySet Name="Categorias" EntityType="Self.Categoria" />
-          <EntitySet Name="Pagoes" EntityType="Self.Pago" />
-          <EntitySet Name="sysdiagrams" EntityType="Self.sysdiagram" />
-          <AssociationSet Name="FK_dbo_AspNetUserClaims_dbo_AspNetUsers_UserId" Association="Self.FK_dbo_AspNetUserClaims_dbo_AspNetUsers_UserId">
-            <End Role="AspNetUsers" EntitySet="AspNetUsers" />
-            <End Role="AspNetUserClaims" EntitySet="AspNetUserClaims" />
-          </AssociationSet>
-          <AssociationSet Name="FK_dbo_AspNetUserLogins_dbo_AspNetUsers_UserId" Association="Self.FK_dbo_AspNetUserLogins_dbo_AspNetUsers_UserId">
-            <End Role="AspNetUsers" EntitySet="AspNetUsers" />
-            <End Role="AspNetUserLogins" EntitySet="AspNetUserLogins" />
-          </AssociationSet>
-          <AssociationSet Name="FK_Brand_ToBusinessPartner" Association="Self.FK_Brand_ToBusinessPartner">
-            <End Role="BusinessPartner" EntitySet="BusinessPartners" />
-            <End Role="Brand" EntitySet="Brands" />
-          </AssociationSet>
-          <AssociationSet Name="AspNetUserRoles" Association="Self.AspNetUserRoles">
-            <End Role="AspNetRoles" EntitySet="AspNetRoles" />
-            <End Role="AspNetUsers" EntitySet="AspNetUsers" />
-          </AssociationSet>
           <FunctionImport Name="ActualizarStock">
             <Parameter Name="IdStock" Mode="In" Type="Int32" />
             <Parameter Name="IdUsuario" Mode="In" Type="Int32" />
-            <Parameter Name="IdPago" Mode="In" Type="Int32" />
             <Parameter Name="estado" Mode="In" Type="String" />
+            <Parameter Name="codigo_pago" Mode="In" Type="String" />
             <Parameter Name="CodigoBP" Mode="In" Type="String" />
             <Parameter Name="fecha_venta" Mode="In" Type="DateTime" />
-            <Parameter Name="monto_pagado" Mode="In" Type="Int64" />
+            <Parameter Name="monto_pagado" Mode="In" Type="String" />
           </FunctionImport>
           <FunctionImport Name="ConsultarProductos" ReturnType="Collection(DataBaseTestModel.ConsultarProductos_Result)" />
           <FunctionImport Name="GetBySearch" ReturnType="Collection(DataBaseTestModel.GetBySearch_Result)">
@@ -557,8 +365,28 @@ warning 6035: The relationship 'FK_Stock_toAspNetUsers' has columns that are not
             <Parameter Name="new_diagramname" Mode="In" Type="String" />
           </FunctionImport>
           <FunctionImport Name="sp_upgraddiagrams" />
+          <EntitySet Name="AspNetRoles" EntityType="DataBaseTestModel.AspNetRole" />
+          <EntitySet Name="AspNetUserClaims" EntityType="DataBaseTestModel.AspNetUserClaim" />
+          <EntitySet Name="AspNetUserLogins" EntityType="DataBaseTestModel.AspNetUserLogin" />
+          <EntitySet Name="AspNetUsers" EntityType="DataBaseTestModel.AspNetUser" />
+          <EntitySet Name="Brands" EntityType="DataBaseTestModel.Brand" />
+          <EntitySet Name="BusinessPartners" EntityType="DataBaseTestModel.BusinessPartner" />
+          <EntitySet Name="Categorias" EntityType="DataBaseTestModel.Categoria" />
           <EntitySet Name="Productoes" EntityType="DataBaseTestModel.Producto" />
           <EntitySet Name="Stocks" EntityType="DataBaseTestModel.Stock" />
+          <EntitySet Name="sysdiagrams" EntityType="DataBaseTestModel.sysdiagram" />
+          <AssociationSet Name="FK_dbo_AspNetUserClaims_dbo_AspNetUsers_UserId" Association="DataBaseTestModel.FK_dbo_AspNetUserClaims_dbo_AspNetUsers_UserId">
+            <End Role="AspNetUser" EntitySet="AspNetUsers" />
+            <End Role="AspNetUserClaim" EntitySet="AspNetUserClaims" />
+          </AssociationSet>
+          <AssociationSet Name="FK_dbo_AspNetUserLogins_dbo_AspNetUsers_UserId" Association="DataBaseTestModel.FK_dbo_AspNetUserLogins_dbo_AspNetUsers_UserId">
+            <End Role="AspNetUser" EntitySet="AspNetUsers" />
+            <End Role="AspNetUserLogin" EntitySet="AspNetUserLogins" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Brand_ToBusinessPartner" Association="DataBaseTestModel.FK_Brand_ToBusinessPartner">
+            <End Role="BusinessPartner" EntitySet="BusinessPartners" />
+            <End Role="Brand" EntitySet="Brands" />
+          </AssociationSet>
           <AssociationSet Name="FK_Producto_toBrand" Association="DataBaseTestModel.FK_Producto_toBrand">
             <End Role="Brand" EntitySet="Brands" />
             <End Role="Producto" EntitySet="Productoes" />
@@ -567,15 +395,15 @@ warning 6035: The relationship 'FK_Stock_toAspNetUsers' has columns that are not
             <End Role="Categoria" EntitySet="Categorias" />
             <End Role="Producto" EntitySet="Productoes" />
           </AssociationSet>
-          <AssociationSet Name="FK_Stock_to_Pago" Association="DataBaseTestModel.FK_Stock_to_Pago">
-            <End Role="Pago" EntitySet="Pagoes" />
-            <End Role="Stock" EntitySet="Stocks" />
-          </AssociationSet>
           <AssociationSet Name="FK_Stock_toProducto" Association="DataBaseTestModel.FK_Stock_toProducto">
             <End Role="Producto" EntitySet="Productoes" />
             <End Role="Stock" EntitySet="Stocks" />
           </AssociationSet>
-        </EntityContainer>
+          <AssociationSet Name="AspNetUserRoles" Association="DataBaseTestModel.AspNetUserRoles">
+            <End Role="AspNetRole" EntitySet="AspNetRoles" />
+            <End Role="AspNetUser" EntitySet="AspNetUsers" />
+          </AssociationSet>
+          </EntityContainer>
         <ComplexType Name="ConsultarProductos_Result">
           <Property Type="Int32" Name="IdProducto" Nullable="false" />
           <Property Type="String" Name="descripcion_producto" Nullable="false" MaxLength="50" />
@@ -612,6 +440,86 @@ warning 6035: The relationship 'FK_Stock_toAspNetUsers' has columns that are not
           <Property Type="String" Name="Owner" Nullable="true" MaxLength="128" />
           <Property Type="Int32" Name="OwnerID" Nullable="false" />
         </ComplexType>
+        <EntityType Name="AspNetRole">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="String" Nullable="false" MaxLength="128" FixedLength="false" Unicode="true" />
+          <Property Name="Name" Type="String" Nullable="false" MaxLength="256" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="AspNetUsers" Relationship="DataBaseTestModel.AspNetUserRoles" FromRole="AspNetRole" ToRole="AspNetUser" />
+        </EntityType>
+        <EntityType Name="AspNetUserClaim">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="UserId" Type="String" Nullable="false" MaxLength="128" FixedLength="false" Unicode="true" />
+          <Property Name="ClaimType" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="ClaimValue" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="AspNetUser" Relationship="DataBaseTestModel.FK_dbo_AspNetUserClaims_dbo_AspNetUsers_UserId" FromRole="AspNetUserClaim" ToRole="AspNetUser" />
+        </EntityType>
+        <EntityType Name="AspNetUserLogin">
+          <Key>
+            <PropertyRef Name="LoginProvider" />
+            <PropertyRef Name="ProviderKey" />
+            <PropertyRef Name="UserId" />
+          </Key>
+          <Property Name="LoginProvider" Type="String" Nullable="false" MaxLength="128" FixedLength="false" Unicode="true" />
+          <Property Name="ProviderKey" Type="String" Nullable="false" MaxLength="128" FixedLength="false" Unicode="true" />
+          <Property Name="UserId" Type="String" Nullable="false" MaxLength="128" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="AspNetUser" Relationship="DataBaseTestModel.FK_dbo_AspNetUserLogins_dbo_AspNetUsers_UserId" FromRole="AspNetUserLogin" ToRole="AspNetUser" />
+        </EntityType>
+        <EntityType Name="AspNetUser">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="String" Nullable="false" MaxLength="128" FixedLength="false" Unicode="true" />
+          <Property Name="IdUsuario" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Email" Type="String" MaxLength="256" FixedLength="false" Unicode="true" />
+          <Property Name="EmailConfirmed" Type="Boolean" Nullable="false" />
+          <Property Name="PasswordHash" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="SecurityStamp" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="PhoneNumber" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="PhoneNumberConfirmed" Type="Boolean" Nullable="false" />
+          <Property Name="TwoFactorEnabled" Type="Boolean" Nullable="false" />
+          <Property Name="LockoutEndDateUtc" Type="DateTime" Precision="3" />
+          <Property Name="LockoutEnabled" Type="Boolean" Nullable="false" />
+          <Property Name="AccessFailedCount" Type="Int32" Nullable="false" />
+          <Property Name="UserName" Type="String" Nullable="false" MaxLength="256" FixedLength="false" Unicode="true" />
+          <Property Name="estado" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
+          <NavigationProperty Name="AspNetUserClaims" Relationship="DataBaseTestModel.FK_dbo_AspNetUserClaims_dbo_AspNetUsers_UserId" FromRole="AspNetUser" ToRole="AspNetUserClaim" />
+          <NavigationProperty Name="AspNetUserLogins" Relationship="DataBaseTestModel.FK_dbo_AspNetUserLogins_dbo_AspNetUsers_UserId" FromRole="AspNetUser" ToRole="AspNetUserLogin" />
+          <NavigationProperty Name="AspNetRoles" Relationship="DataBaseTestModel.AspNetUserRoles" FromRole="AspNetUser" ToRole="AspNetRole" />
+        </EntityType>
+        <EntityType Name="Brand">
+          <Key>
+            <PropertyRef Name="IdBrand" />
+          </Key>
+          <Property Name="IdBrand" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Descripcion_brand" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="IdBusinessPartner" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="BusinessPartner" Relationship="DataBaseTestModel.FK_Brand_ToBusinessPartner" FromRole="Brand" ToRole="BusinessPartner" />
+          <NavigationProperty Name="Productoes" Relationship="DataBaseTestModel.FK_Producto_toBrand" FromRole="Brand" ToRole="Producto" />
+        </EntityType>
+        <EntityType Name="BusinessPartner">
+          <Key>
+            <PropertyRef Name="IdBusinessPartner" />
+          </Key>
+          <Property Name="IdBusinessPartner" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="RUC" Type="String" Nullable="false" MaxLength="11" FixedLength="true" Unicode="true" />
+          <Property Name="razon_social" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="fecha_alta" Type="DateTime" Nullable="false" Precision="0" />
+          <NavigationProperty Name="Brands" Relationship="DataBaseTestModel.FK_Brand_ToBusinessPartner" FromRole="BusinessPartner" ToRole="Brand" />
+        </EntityType>
+        <EntityType Name="Categoria">
+          <Key>
+            <PropertyRef Name="IdCategoria" />
+          </Key>
+          <Property Name="IdCategoria" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="descripcion_categoria" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="grupo" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="Productoes" Relationship="DataBaseTestModel.FK_Producto_toCategoria" FromRole="Categoria" ToRole="Producto" />
+        </EntityType>
         <EntityType Name="Producto">
           <Key>
             <PropertyRef Name="IdProducto" />
@@ -636,14 +544,64 @@ warning 6035: The relationship 'FK_Stock_toAspNetUsers' has columns that are not
           <Property Name="IdStock" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="IdProducto" Type="Int32" />
           <Property Name="IdUsuario" Type="Int32" />
-          <Property Name="IdPago" Type="Int32" />
           <Property Name="estado" Type="String" MaxLength="25" FixedLength="false" Unicode="true" />
           <Property Name="CodigoBP" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Name="fecha_venta" Type="DateTime" Precision="3" />
-          <Property Name="monto_pagado" Type="Decimal" Precision="18" Scale="2" />
-          <NavigationProperty Name="Pago" Relationship="DataBaseTestModel.FK_Stock_to_Pago" FromRole="Stock" ToRole="Pago" />
+          <Property Name="monto_pagado" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="monto" Type="Decimal" Precision="18" Scale="2" />
+          <Property Name="codigo_pago" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
           <NavigationProperty Name="Producto" Relationship="DataBaseTestModel.FK_Stock_toProducto" FromRole="Stock" ToRole="Producto" />
         </EntityType>
+        <EntityType Name="sysdiagram">
+          <Key>
+            <PropertyRef Name="diagram_id" />
+          </Key>
+          <Property Name="name" Type="String" Nullable="false" MaxLength="128" FixedLength="false" Unicode="true" />
+          <Property Name="principal_id" Type="Int32" Nullable="false" />
+          <Property Name="diagram_id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="version" Type="Int32" />
+          <Property Name="definition" Type="Binary" MaxLength="Max" FixedLength="false" />
+        </EntityType>
+        <Association Name="FK_dbo_AspNetUserClaims_dbo_AspNetUsers_UserId">
+          <End Type="DataBaseTestModel.AspNetUser" Role="AspNetUser" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Type="DataBaseTestModel.AspNetUserClaim" Role="AspNetUserClaim" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="AspNetUser">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="AspNetUserClaim">
+              <PropertyRef Name="UserId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_dbo_AspNetUserLogins_dbo_AspNetUsers_UserId">
+          <End Type="DataBaseTestModel.AspNetUser" Role="AspNetUser" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Type="DataBaseTestModel.AspNetUserLogin" Role="AspNetUserLogin" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="AspNetUser">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="AspNetUserLogin">
+              <PropertyRef Name="UserId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Brand_ToBusinessPartner">
+          <End Type="DataBaseTestModel.BusinessPartner" Role="BusinessPartner" Multiplicity="1" />
+          <End Type="DataBaseTestModel.Brand" Role="Brand" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="BusinessPartner">
+              <PropertyRef Name="IdBusinessPartner" />
+            </Principal>
+            <Dependent Role="Brand">
+              <PropertyRef Name="IdBusinessPartner" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="FK_Producto_toBrand">
           <End Type="DataBaseTestModel.Brand" Role="Brand" Multiplicity="1" />
           <End Type="DataBaseTestModel.Producto" Role="Producto" Multiplicity="*" />
@@ -668,18 +626,6 @@ warning 6035: The relationship 'FK_Stock_toAspNetUsers' has columns that are not
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK_Stock_to_Pago">
-          <End Type="DataBaseTestModel.Pago" Role="Pago" Multiplicity="0..1" />
-          <End Type="DataBaseTestModel.Stock" Role="Stock" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Pago">
-              <PropertyRef Name="IdPago" />
-            </Principal>
-            <Dependent Role="Stock">
-              <PropertyRef Name="IdPago" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
         <Association Name="FK_Stock_toProducto">
           <End Type="DataBaseTestModel.Producto" Role="Producto" Multiplicity="0..1" />
           <End Type="DataBaseTestModel.Stock" Role="Stock" Multiplicity="*" />
@@ -692,115 +638,16 @@ warning 6035: The relationship 'FK_Stock_toAspNetUsers' has columns that are not
             </Dependent>
           </ReferentialConstraint>
         </Association>
-      </Schema>
+        <Association Name="AspNetUserRoles">
+          <End Type="DataBaseTestModel.AspNetRole" Role="AspNetRole" Multiplicity="*" />
+          <End Type="DataBaseTestModel.AspNetUser" Role="AspNetUser" Multiplicity="*" />
+        </Association>
+        </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
     <edmx:Mappings>
       <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
         <EntityContainerMapping StorageEntityContainer="DataBaseTestModelStoreContainer" CdmEntityContainer="DataBaseTestEntities">
-          <EntitySetMapping Name="AspNetRoles">
-            <EntityTypeMapping TypeName="DataBaseTestModel.AspNetRole">
-              <MappingFragment StoreEntitySet="AspNetRoles">
-                <ScalarProperty Name="Id" ColumnName="Id" />
-                <ScalarProperty Name="Name" ColumnName="Name" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="AspNetUserClaims">
-            <EntityTypeMapping TypeName="DataBaseTestModel.AspNetUserClaim">
-              <MappingFragment StoreEntitySet="AspNetUserClaims">
-                <ScalarProperty Name="Id" ColumnName="Id" />
-                <ScalarProperty Name="UserId" ColumnName="UserId" />
-                <ScalarProperty Name="ClaimType" ColumnName="ClaimType" />
-                <ScalarProperty Name="ClaimValue" ColumnName="ClaimValue" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="AspNetUserLogins">
-            <EntityTypeMapping TypeName="DataBaseTestModel.AspNetUserLogin">
-              <MappingFragment StoreEntitySet="AspNetUserLogins">
-                <ScalarProperty Name="LoginProvider" ColumnName="LoginProvider" />
-                <ScalarProperty Name="ProviderKey" ColumnName="ProviderKey" />
-                <ScalarProperty Name="UserId" ColumnName="UserId" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="AspNetUsers">
-            <EntityTypeMapping TypeName="DataBaseTestModel.AspNetUser">
-              <MappingFragment StoreEntitySet="AspNetUsers">
-                <ScalarProperty Name="Id" ColumnName="Id" />
-                <ScalarProperty Name="IdUsuario" ColumnName="IdUsuario" />
-                <ScalarProperty Name="Email" ColumnName="Email" />
-                <ScalarProperty Name="EmailConfirmed" ColumnName="EmailConfirmed" />
-                <ScalarProperty Name="PasswordHash" ColumnName="PasswordHash" />
-                <ScalarProperty Name="SecurityStamp" ColumnName="SecurityStamp" />
-                <ScalarProperty Name="PhoneNumber" ColumnName="PhoneNumber" />
-                <ScalarProperty Name="PhoneNumberConfirmed" ColumnName="PhoneNumberConfirmed" />
-                <ScalarProperty Name="TwoFactorEnabled" ColumnName="TwoFactorEnabled" />
-                <ScalarProperty Name="LockoutEndDateUtc" ColumnName="LockoutEndDateUtc" />
-                <ScalarProperty Name="LockoutEnabled" ColumnName="LockoutEnabled" />
-                <ScalarProperty Name="AccessFailedCount" ColumnName="AccessFailedCount" />
-                <ScalarProperty Name="UserName" ColumnName="UserName" />
-                <ScalarProperty Name="estado" ColumnName="estado" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="Brands">
-            <EntityTypeMapping TypeName="DataBaseTestModel.Brand">
-              <MappingFragment StoreEntitySet="Brand">
-                <ScalarProperty Name="IdBrand" ColumnName="IdBrand" />
-                <ScalarProperty Name="Descripcion_brand" ColumnName="Descripcion_brand" />
-                <ScalarProperty Name="IdBusinessPartner" ColumnName="IdBusinessPartner" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="BusinessPartners">
-            <EntityTypeMapping TypeName="DataBaseTestModel.BusinessPartner">
-              <MappingFragment StoreEntitySet="BusinessPartner">
-                <ScalarProperty Name="IdBusinessPartner" ColumnName="IdBusinessPartner" />
-                <ScalarProperty Name="RUC" ColumnName="RUC" />
-                <ScalarProperty Name="razon_social" ColumnName="razon_social" />
-                <ScalarProperty Name="fecha_alta" ColumnName="fecha_alta" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="Categorias">
-            <EntityTypeMapping TypeName="DataBaseTestModel.Categoria">
-              <MappingFragment StoreEntitySet="Categoria">
-                <ScalarProperty Name="IdCategoria" ColumnName="IdCategoria" />
-                <ScalarProperty Name="descripcion_categoria" ColumnName="descripcion_categoria" />
-                <ScalarProperty Name="grupo" ColumnName="grupo" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="Pagoes">
-            <EntityTypeMapping TypeName="DataBaseTestModel.Pago">
-              <MappingFragment StoreEntitySet="Pago">
-                <ScalarProperty Name="IdPago" ColumnName="IdPago" />
-                <ScalarProperty Name="descripción_pago" ColumnName="descripción_pago" />
-                <ScalarProperty Name="Observaciones" ColumnName="Observaciones" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="sysdiagrams">
-            <EntityTypeMapping TypeName="DataBaseTestModel.sysdiagram">
-              <MappingFragment StoreEntitySet="sysdiagrams">
-                <ScalarProperty Name="name" ColumnName="name" />
-                <ScalarProperty Name="principal_id" ColumnName="principal_id" />
-                <ScalarProperty Name="diagram_id" ColumnName="diagram_id" />
-                <ScalarProperty Name="version" ColumnName="version" />
-                <ScalarProperty Name="definition" ColumnName="definition" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <AssociationSetMapping Name="AspNetUserRoles" TypeName="DataBaseTestModel.AspNetUserRoles" StoreEntitySet="AspNetUserRoles">
-            <EndProperty Name="AspNetRoles">
-              <ScalarProperty Name="Id" ColumnName="RoleId" />
-            </EndProperty>
-            <EndProperty Name="AspNetUsers">
-              <ScalarProperty Name="Id" ColumnName="UserId" />
-            </EndProperty>
-          </AssociationSetMapping>
           <FunctionImportMapping FunctionImportName="ActualizarStock" FunctionName="DataBaseTestModel.Store.ActualizarStock" />
           <FunctionImportMapping FunctionImportName="ConsultarProductos" FunctionName="DataBaseTestModel.Store.ConsultarProductos">
             <ResultMapping>
@@ -859,6 +706,81 @@ warning 6035: The relationship 'FK_Stock_toAspNetUsers' has columns that are not
           </FunctionImportMapping>
           <FunctionImportMapping FunctionImportName="sp_renamediagram" FunctionName="DataBaseTestModel.Store.sp_renamediagram" />
           <FunctionImportMapping FunctionImportName="sp_upgraddiagrams" FunctionName="DataBaseTestModel.Store.sp_upgraddiagrams" />
+          <EntitySetMapping Name="AspNetRoles">
+            <EntityTypeMapping TypeName="DataBaseTestModel.AspNetRole">
+              <MappingFragment StoreEntitySet="AspNetRoles">
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="AspNetUserClaims">
+            <EntityTypeMapping TypeName="DataBaseTestModel.AspNetUserClaim">
+              <MappingFragment StoreEntitySet="AspNetUserClaims">
+                <ScalarProperty Name="ClaimValue" ColumnName="ClaimValue" />
+                <ScalarProperty Name="ClaimType" ColumnName="ClaimType" />
+                <ScalarProperty Name="UserId" ColumnName="UserId" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="AspNetUserLogins">
+            <EntityTypeMapping TypeName="DataBaseTestModel.AspNetUserLogin">
+              <MappingFragment StoreEntitySet="AspNetUserLogins">
+                <ScalarProperty Name="UserId" ColumnName="UserId" />
+                <ScalarProperty Name="ProviderKey" ColumnName="ProviderKey" />
+                <ScalarProperty Name="LoginProvider" ColumnName="LoginProvider" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="AspNetUsers">
+            <EntityTypeMapping TypeName="DataBaseTestModel.AspNetUser">
+              <MappingFragment StoreEntitySet="AspNetUsers">
+                <ScalarProperty Name="estado" ColumnName="estado" />
+                <ScalarProperty Name="UserName" ColumnName="UserName" />
+                <ScalarProperty Name="AccessFailedCount" ColumnName="AccessFailedCount" />
+                <ScalarProperty Name="LockoutEnabled" ColumnName="LockoutEnabled" />
+                <ScalarProperty Name="LockoutEndDateUtc" ColumnName="LockoutEndDateUtc" />
+                <ScalarProperty Name="TwoFactorEnabled" ColumnName="TwoFactorEnabled" />
+                <ScalarProperty Name="PhoneNumberConfirmed" ColumnName="PhoneNumberConfirmed" />
+                <ScalarProperty Name="PhoneNumber" ColumnName="PhoneNumber" />
+                <ScalarProperty Name="SecurityStamp" ColumnName="SecurityStamp" />
+                <ScalarProperty Name="PasswordHash" ColumnName="PasswordHash" />
+                <ScalarProperty Name="EmailConfirmed" ColumnName="EmailConfirmed" />
+                <ScalarProperty Name="Email" ColumnName="Email" />
+                <ScalarProperty Name="IdUsuario" ColumnName="IdUsuario" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Brands">
+            <EntityTypeMapping TypeName="DataBaseTestModel.Brand">
+              <MappingFragment StoreEntitySet="Brand">
+                <ScalarProperty Name="IdBusinessPartner" ColumnName="IdBusinessPartner" />
+                <ScalarProperty Name="Descripcion_brand" ColumnName="Descripcion_brand" />
+                <ScalarProperty Name="IdBrand" ColumnName="IdBrand" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="BusinessPartners">
+            <EntityTypeMapping TypeName="DataBaseTestModel.BusinessPartner">
+              <MappingFragment StoreEntitySet="BusinessPartner">
+                <ScalarProperty Name="fecha_alta" ColumnName="fecha_alta" />
+                <ScalarProperty Name="razon_social" ColumnName="razon_social" />
+                <ScalarProperty Name="RUC" ColumnName="RUC" />
+                <ScalarProperty Name="IdBusinessPartner" ColumnName="IdBusinessPartner" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Categorias">
+            <EntityTypeMapping TypeName="DataBaseTestModel.Categoria">
+              <MappingFragment StoreEntitySet="Categoria">
+                <ScalarProperty Name="grupo" ColumnName="grupo" />
+                <ScalarProperty Name="descripcion_categoria" ColumnName="descripcion_categoria" />
+                <ScalarProperty Name="IdCategoria" ColumnName="IdCategoria" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
           <EntitySetMapping Name="Productoes">
             <EntityTypeMapping TypeName="DataBaseTestModel.Producto">
               <MappingFragment StoreEntitySet="Producto">
@@ -877,18 +799,38 @@ warning 6035: The relationship 'FK_Stock_toAspNetUsers' has columns that are not
           <EntitySetMapping Name="Stocks">
             <EntityTypeMapping TypeName="DataBaseTestModel.Stock">
               <MappingFragment StoreEntitySet="Stock">
+                <ScalarProperty Name="codigo_pago" ColumnName="codigo_pago" />
+                <ScalarProperty Name="monto" ColumnName="monto" />
                 <ScalarProperty Name="monto_pagado" ColumnName="monto_pagado" />
                 <ScalarProperty Name="fecha_venta" ColumnName="fecha_venta" />
                 <ScalarProperty Name="CodigoBP" ColumnName="CodigoBP" />
                 <ScalarProperty Name="estado" ColumnName="estado" />
-                <ScalarProperty Name="IdPago" ColumnName="IdPago" />
                 <ScalarProperty Name="IdUsuario" ColumnName="IdUsuario" />
                 <ScalarProperty Name="IdProducto" ColumnName="IdProducto" />
                 <ScalarProperty Name="IdStock" ColumnName="IdStock" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
-        </EntityContainerMapping>
+          <EntitySetMapping Name="sysdiagrams">
+            <EntityTypeMapping TypeName="DataBaseTestModel.sysdiagram">
+              <MappingFragment StoreEntitySet="sysdiagrams">
+                <ScalarProperty Name="definition" ColumnName="definition" />
+                <ScalarProperty Name="version" ColumnName="version" />
+                <ScalarProperty Name="diagram_id" ColumnName="diagram_id" />
+                <ScalarProperty Name="principal_id" ColumnName="principal_id" />
+                <ScalarProperty Name="name" ColumnName="name" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <AssociationSetMapping Name="AspNetUserRoles" TypeName="DataBaseTestModel.AspNetUserRoles" StoreEntitySet="AspNetUserRoles">
+            <EndProperty Name="AspNetUser">
+              <ScalarProperty Name="Id" ColumnName="UserId" />
+            </EndProperty>
+            <EndProperty Name="AspNetRole">
+              <ScalarProperty Name="Id" ColumnName="RoleId" />
+            </EndProperty>
+          </AssociationSetMapping>
+          </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>
   </edmx:Runtime>

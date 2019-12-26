@@ -137,6 +137,12 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>Bin\RestSharp.dll</HintPath>
     </Reference>
+    <Reference Include="Rotativa.Core, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Rotativa.Core.2.0.0\lib\net45\Rotativa.Core.dll</HintPath>
+    </Reference>
+    <Reference Include="Rotativa.MVC, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Rotativa.MVC.2.0.3\lib\net45\Rotativa.MVC.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.ComponentModel.Composition" />
     <Reference Include="System.Data" />
@@ -327,9 +333,6 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Model.edmx</DependentUpon>
     </Compile>
-    <Compile Include="DAL\Pago.cs">
-      <DependentUpon>Model.tt</DependentUpon>
-    </Compile>
     <Compile Include="DAL\Producto.cs">
       <DependentUpon>Model.tt</DependentUpon>
     </Compile>
@@ -358,10 +361,11 @@
     <Compile Include="Models\Home\Card.cs" />
     <Compile Include="Models\Home\HomeIndexViewModel.cs" />
     <Compile Include="Models\Home\Item.cs" />
+    <Compile Include="Models\Home\StockModel.cs" />
     <Compile Include="Models\IdentityModels.cs" />
     <Compile Include="Models\ManageViewModels.cs" />
     <Compile Include="Models\ProductDetail.cs" />
-    <Compile Include="Models\Stock.cs" />
+    <Compile Include="Models\ProductStock.cs" />
     <Compile Include="Models\StockIndexViewModel.cs" />
     <Compile Include="Models\TemplateEmail.cs" />
     <Compile Include="Models\TokenCulqi.cs" />
@@ -2004,6 +2008,7 @@
     <Content Include="ProductImg\gift150.jpg" />
     <Content Include="ProductImg\gift50.jpg" />
     <Content Include="ProductImg\GiftCard100.jpg" />
+    <Content Include="Rotativa\wkhtmltopdf.exe" />
     <Content Include="Scripts\bootstrap.bundle.js" />
     <Content Include="Scripts\bootstrap.bundle.min.js" />
     <Content Include="Scripts\bootstrap.js" />
@@ -2187,6 +2192,7 @@
     <Content Include="DAL\Model.edmx.diagram">
       <DependentUpon>Model.edmx</DependentUpon>
     </Content>
+    <Content Include="App_Browsers\qt.browser" />
     <None Include="Properties\PublishProfiles\orionPeru - Web Deploy.pubxml" />
     <None Include="Scripts\jquery-3.3.1.intellisense.js" />
     <Content Include="Scripts\jquery-3.3.1.js" />
@@ -2324,14 +2330,14 @@
     <Content Include="Views\Info\Terms.cshtml" />
     <Content Include="Views\Info\AboutUs.cshtml" />
     <Content Include="Views\Account\DisplayEmail.cshtml" />
-    <Content Include="Views\Productos\CompraCorrecta.cshtml" />
+    <Content Include="Views\Home\CompraCorrecta.cshtml" />
     <Content Include="Views\Home\RealizarPago.cshtml" />
     <Content Include="Views\Productos\Catalog.cshtml" />
     <Content Include="Views\Productos\Create.cshtml" />
     <Content Include="Views\Productos\Delete.cshtml" />
     <Content Include="Views\Productos\Details.cshtml" />
     <Content Include="Views\Productos\Edit.cshtml" />
-    <Content Include="Views\Productos\Index.cshtml" />
+    <Content Include="Views\Productos\Index3.cshtml" />
     <Content Include="Views\RolesAdmin\Create.cshtml" />
     <Content Include="Views\RolesAdmin\Delete.cshtml" />
     <Content Include="Views\RolesAdmin\Details.cshtml" />
@@ -2348,9 +2354,12 @@
     <Content Include="Views\Admin\AllUsers.cshtml" />
     <Content Include="Views\Admin\AllStocks.cshtml" />
     <Content Include="Views\Admin\AllProducts.cshtml" />
-    <Content Include="Views\Home\RealizarPagoList.cshtml" />
+    <Content Include="Views\Productos\RealizarPagoList.cshtml" />
     <Content Include="Views\Admin\AllBrands.cshtml" />
     <Content Include="Views\Admin\AllCategories.cshtml" />
+    <Content Include="Views\Admin\AllBP.cshtml" />
+    <Content Include="Views\Shared\_FormCard.cshtml" />
+    <Content Include="Views\Productos\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

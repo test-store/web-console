@@ -1,4 +1,4 @@
-﻿@model IEnumerable<FinalSite.DAL.Producto>
+﻿@model IEnumerable<FinalSite.Models.ProductStock>
 @{
     ViewBag.Title = "Listar Productos";
 }
@@ -21,11 +21,11 @@
 
                     </div>
                     <div class="card-info">
-                        <h4 class="text-center">S./ @string.Format("{0:n2}",item.precio) </h4>
-                       
-                       
+                        <h4 class="text-center">S./ @item.precio </h4>
+
+
                     </div>
-                 
+
                     <div class="card-footer bg-transparent row">
 
                         <div class="col-8 text-center">
@@ -34,7 +34,7 @@
 
 
                         </div>
-                        <div class="d-none col-4 text-md-center text-lg-center">
+                        <div class=" col-4 text-md-center text-lg-center">
                             @using (Html.BeginForm("AddToCart", "Productos", new { IdProducto = item.IdProducto }, FormMethod.Post))
                             {
                                 <button type="submit" class="float-right btn btn-dark"><i class="fa fa-shopping-cart"></i></button>

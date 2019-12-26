@@ -16,7 +16,7 @@ namespace FinalSite.Models
           
             try
             {
-                SmtpMail oMail = new SmtpMail("TryIt");
+                SmtpMail oMail = new SmtpMail("Mensaje");
 
                 // Your gmail email address
                 oMail.From = "soportembww@gmail.com";
@@ -27,7 +27,9 @@ namespace FinalSite.Models
                 // Set email subject
                 oMail.Subject = "Compra de productos";
                 // Set email body
-                oMail.TextBody = "Gracias por su compra,  pronto le enviaremos el detalle de su compra";
+                oMail.TextBody = "¡Gracias por su compra en OrionPeru! Pronto le enviaremos el detalle de su compra" + "<hr />" +"OrionPeru";
+
+                
 
                 // Gmail SMTP server address
                 SmtpServer oServer = new SmtpServer("smtp.gmail.com");

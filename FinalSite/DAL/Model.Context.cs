@@ -34,12 +34,11 @@ namespace FinalSite.DAL
         public virtual DbSet<Brand> Brands { get; set; }
         public virtual DbSet<BusinessPartner> BusinessPartners { get; set; }
         public virtual DbSet<Categoria> Categorias { get; set; }
-        public virtual DbSet<Pago> Pagoes { get; set; }
-        public virtual DbSet<sysdiagram> sysdiagrams { get; set; }
-        public virtual DbSet<Stock> Stocks { get; set; }
         public virtual DbSet<Producto> Productoes { get; set; }
+        public virtual DbSet<Stock> Stocks { get; set; }
+        public virtual DbSet<sysdiagram> sysdiagrams { get; set; }
     
-        public virtual int ActualizarStock(Nullable<int> idStock, Nullable<int> idUsuario, Nullable<int> idPago, string estado, string codigoBP, Nullable<System.DateTime> fecha_venta, Nullable<long> monto_pagado)
+        public virtual int ActualizarStock(Nullable<int> idStock, Nullable<int> idUsuario, string estado, string codigo_pago, string codigoBP, Nullable<System.DateTime> fecha_venta, string monto_pagado)
         {
             var idStockParameter = idStock.HasValue ?
                 new ObjectParameter("IdStock", idStock) :
@@ -49,13 +48,13 @@ namespace FinalSite.DAL
                 new ObjectParameter("IdUsuario", idUsuario) :
                 new ObjectParameter("IdUsuario", typeof(int));
     
-            var idPagoParameter = idPago.HasValue ?
-                new ObjectParameter("IdPago", idPago) :
-                new ObjectParameter("IdPago", typeof(int));
-    
             var estadoParameter = estado != null ?
                 new ObjectParameter("estado", estado) :
                 new ObjectParameter("estado", typeof(string));
+    
+            var codigo_pagoParameter = codigo_pago != null ?
+                new ObjectParameter("codigo_pago", codigo_pago) :
+                new ObjectParameter("codigo_pago", typeof(string));
     
             var codigoBPParameter = codigoBP != null ?
                 new ObjectParameter("CodigoBP", codigoBP) :
@@ -65,11 +64,11 @@ namespace FinalSite.DAL
                 new ObjectParameter("fecha_venta", fecha_venta) :
                 new ObjectParameter("fecha_venta", typeof(System.DateTime));
     
-            var monto_pagadoParameter = monto_pagado.HasValue ?
+            var monto_pagadoParameter = monto_pagado != null ?
                 new ObjectParameter("monto_pagado", monto_pagado) :
-                new ObjectParameter("monto_pagado", typeof(long));
+                new ObjectParameter("monto_pagado", typeof(string));
     
-            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("ActualizarStock", idStockParameter, idUsuarioParameter, idPagoParameter, estadoParameter, codigoBPParameter, fecha_ventaParameter, monto_pagadoParameter);
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("ActualizarStock", idStockParameter, idUsuarioParameter, estadoParameter, codigo_pagoParameter, codigoBPParameter, fecha_ventaParameter, monto_pagadoParameter);
         }
     
         public virtual ObjectResult<ConsultarProductos_Result> ConsultarProductos()
